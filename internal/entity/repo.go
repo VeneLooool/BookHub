@@ -6,5 +6,4 @@ type Repo struct {
 	Name    string
 	Desc    string
 	Books   []int64
-	UsersID []int64
 }
