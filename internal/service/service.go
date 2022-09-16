@@ -14,7 +14,7 @@ type BookUseCase interface {
 type UserUseCase interface {
 	CreateUser(context.Context, entity.User) (int64, error)
 	GetUser(context.Context, int64) (entity.User, error)
-	UpdateUser(context.Context, entity.User) error
+	UpdateUser(context.Context, entity.User) (entity.User, error)
 	DeleteUser(context.Context, int64) error
 }
 type RepoUseCase interface {

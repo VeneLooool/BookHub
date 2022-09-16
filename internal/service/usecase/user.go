@@ -41,15 +41,18 @@ func (us *UserService) updateUser(oldUser, newUser entity.User) entity.User {
 	}
 	return oldUser
 }
-func (us *UserService) UpdateUser(ctx context.Context, user entity.User) error {
+func (us *UserService) UpdateUser(ctx context.Context, user entity.User) (entity.User, error) {
 	oldUser, err := us.storage.GetUser(ctx, user.ID)
 	if err != nil {
-		return err
+		return entity.User{}, err
 	}
 
 	user = us.updateUser(oldUser, user)
 	err = us.storage.UpdateUser(ctx, user)
-	return err
+	if err != nil {
+		return entity.User{}, err
+	}
+	return user, nil
 }
 
 func (us *UserService) DeleteUser(ctx context.Context, userID int64) error {
