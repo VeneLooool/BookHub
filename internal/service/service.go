@@ -8,7 +8,7 @@ import (
 type BookUseCase interface {
 	CreateBook(context.Context, entity.Book) (int64, error)
 	GetBook(context.Context, int64) (entity.Book, error)
-	UpdateBook(context.Context, entity.Book) error
+	UpdateBook(context.Context, entity.Book) (entity.Book, error)
 	DeleteBook(context.Context, int64) error
 }
 type UserUseCase interface {
@@ -20,7 +20,7 @@ type UserUseCase interface {
 type RepoUseCase interface {
 	CreateRepo(context.Context, entity.Repo) (int64, error)
 	GetRepo(context.Context, int64) (entity.Repo, error)
-	UpdateRepo(context.Context, entity.Repo) error
+	UpdateRepo(context.Context, entity.Repo) (entity.Repo, error)
 	DeleteRepo(context.Context, int64) error
 }
 
