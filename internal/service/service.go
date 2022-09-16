@@ -2,7 +2,6 @@ package service
 
 import (
 	"bookhub/internal/entity"
-	"bookhub/internal/storage"
 	"context"
 )
 
@@ -25,34 +24,8 @@ type RepoUseCase interface {
 	DeleteRepo(context.Context, int64) error
 }
 
-type Service struct {
-	User UserUseCase
-	Book BookUseCase
-	Repo RepoUseCase
-}
-
-type Deps struct {
-	Storage *storage.Storage
-}
-
-/*
-func NewService(deps Deps) *Service {
-	userService := usecase.NewUserService(deps.Storage.UserStorage)
-	bookService := usecase.NewBookService(deps.Storage.BookStorage)
-	repoService := usecase.NewRepoService(deps.Storage.RepoStorage)
-	return &Service{
-		User: userService,
-		Book: bookService,
-		Repo: repoService,
-	}
-}
-*/
-//TODO как лучше это сделать?
-
-func NewService(userService UserUseCase, bookService BookUseCase, repoService RepoUseCase) *Service {
-	return &Service{
-		User: userService,
-		Book: bookService,
-		Repo: repoService,
-	}
+type Service interface {
+	UserUseCase
+	BookUseCase
+	RepoUseCase
 }
