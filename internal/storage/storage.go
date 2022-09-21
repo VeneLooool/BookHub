@@ -25,9 +25,3 @@ type BookStorage interface {
 	UpdateBook(context.Context, entity.Book) error
 	DeleteBook(context.Context, int64) error
 }
-
-type Storage struct {
-	UserStorage
-	RepoStorage
-	BookStorage
-}

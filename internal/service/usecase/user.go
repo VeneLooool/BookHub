@@ -46,7 +46,7 @@ func (us *UserService) UpdateUser(ctx context.Context, user entity.User) (entity
 	if err != nil {
 		return entity.User{}, err
 	}
-
+	
 	user = us.updateUser(oldUser, user)
 	err = us.storage.UpdateUser(ctx, user)
 	if err != nil {
