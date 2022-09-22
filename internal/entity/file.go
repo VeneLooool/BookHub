@@ -24,7 +24,7 @@ type File struct {
 	Name   string
 	Path   string
 	Size   int64
-	file   []byte
+	File   []byte
 	Type   FileType
 	Status FileStatus
 }

@@ -25,3 +25,17 @@ type BookStorage interface {
 	UpdateBook(context.Context, entity.Book) error
 	DeleteBook(context.Context, int64) error
 }
+
+type FileManager interface {
+	CreateFile(context.Context, entity.File) (string, error)
+	GetFile(context.Context, string) (entity.File, error)
+	UpdateFile(context.Context, entity.File) error
+	DeleteFile(context.Context, string) error
+}
+
+type Storage interface {
+	UserStorage
+	RepoStorage
+	BookStorage
+	FileManager
+}

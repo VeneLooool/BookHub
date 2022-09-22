@@ -6,6 +6,6 @@ type Book struct {
 	Author      string
 	NumberPages int64
 	Desc        string
-	Image       []File
-	File        []File
+	Image       File
+	File        File
 }
