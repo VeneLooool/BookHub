@@ -50,7 +50,7 @@ func TestRepoService_UpdateRepo(t *testing.T) {
 
 			res, err := repoService.UpdateRepo(context.Background(), entity.Repo{})
 			require.EqualValues(t, res, tc.res)
-			require.ErrorIs(t, err, tc.err)
+			require.ErrorIs(t, errors.Unwrap(err), tc.err)
 		})
 	}
 }

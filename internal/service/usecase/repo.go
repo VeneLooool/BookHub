@@ -31,7 +31,11 @@ func (rs *RepoService) CreateRepo(ctx context.Context, repo entity.Repo) (ID int
 	return ID, nil
 }
 func (rs *RepoService) GetRepo(ctx context.Context, ID int64) (repo entity.Repo, err error) {
-	return rs.storage.GetRepo(ctx, ID)
+	repo, err = rs.storage.GetRepo(ctx, ID)
+	if err != nil {
+		return entity.Repo{}, fmt.Errorf("GetRepo: %w", err)
+	}
+	return repo, nil
 }
 func (rs *RepoService) updateRepo(oldRepo, newRepo entity.Repo) entity.Repo {
 	if newRepo.Visibility != "" {

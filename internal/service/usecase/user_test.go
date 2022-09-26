@@ -58,7 +58,7 @@ func TestUserService_UpdateUser(t *testing.T) {
 
 			res, err := userService.UpdateUser(context.Background(), entity.User{})
 			require.EqualValues(t, res, tc.res)
-			require.ErrorIs(t, err, tc.err)
+			require.ErrorIs(t, errors.Unwrap(err), tc.err)
 		})
 	}
 }

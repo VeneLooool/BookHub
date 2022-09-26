@@ -254,3 +254,339 @@ func (mr *MockBookStorageMockRecorder) UpdateBook(arg0, arg1 interface{}) *gomoc
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateBook", reflect.TypeOf((*MockBookStorage)(nil).UpdateBook), arg0, arg1)
 }
+
+// MockFileManager is a mock of FileManager interface.
+type MockFileManager struct {
+	ctrl     *gomock.Controller
+	recorder *MockFileManagerMockRecorder
+}
+
+// MockFileManagerMockRecorder is the mock recorder for MockFileManager.
+type MockFileManagerMockRecorder struct {
+	mock *MockFileManager
+}
+
+// NewMockFileManager creates a new mock instance.
+func NewMockFileManager(ctrl *gomock.Controller) *MockFileManager {
+	mock := &MockFileManager{ctrl: ctrl}
+	mock.recorder = &MockFileManagerMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockFileManager) EXPECT() *MockFileManagerMockRecorder {
+	return m.recorder
+}
+
+// CreateFile mocks base method.
+func (m *MockFileManager) CreateFile(arg0 context.Context, arg1 entity.File) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateFile", arg0, arg1)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateFile indicates an expected call of CreateFile.
+func (mr *MockFileManagerMockRecorder) CreateFile(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFile", reflect.TypeOf((*MockFileManager)(nil).CreateFile), arg0, arg1)
+}
+
+// DeleteFile mocks base method.
+func (m *MockFileManager) DeleteFile(arg0 context.Context, arg1 string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteFile", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteFile indicates an expected call of DeleteFile.
+func (mr *MockFileManagerMockRecorder) DeleteFile(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFile", reflect.TypeOf((*MockFileManager)(nil).DeleteFile), arg0, arg1)
+}
+
+// GetFile mocks base method.
+func (m *MockFileManager) GetFile(arg0 context.Context, arg1 string) (entity.File, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetFile", arg0, arg1)
+	ret0, _ := ret[0].(entity.File)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetFile indicates an expected call of GetFile.
+func (mr *MockFileManagerMockRecorder) GetFile(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFile", reflect.TypeOf((*MockFileManager)(nil).GetFile), arg0, arg1)
+}
+
+// UpdateFile mocks base method.
+func (m *MockFileManager) UpdateFile(arg0 context.Context, arg1 entity.File) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateFile", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateFile indicates an expected call of UpdateFile.
+func (mr *MockFileManagerMockRecorder) UpdateFile(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateFile", reflect.TypeOf((*MockFileManager)(nil).UpdateFile), arg0, arg1)
+}
+
+// MockStorage is a mock of Storage interface.
+type MockStorage struct {
+	ctrl     *gomock.Controller
+	recorder *MockStorageMockRecorder
+}
+
+// MockStorageMockRecorder is the mock recorder for MockStorage.
+type MockStorageMockRecorder struct {
+	mock *MockStorage
+}
+
+// NewMockStorage creates a new mock instance.
+func NewMockStorage(ctrl *gomock.Controller) *MockStorage {
+	mock := &MockStorage{ctrl: ctrl}
+	mock.recorder = &MockStorageMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockStorage) EXPECT() *MockStorageMockRecorder {
+	return m.recorder
+}
+
+// CreateBook mocks base method.
+func (m *MockStorage) CreateBook(arg0 context.Context, arg1 entity.Book) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateBook", arg0, arg1)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateBook indicates an expected call of CreateBook.
+func (mr *MockStorageMockRecorder) CreateBook(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateBook", reflect.TypeOf((*MockStorage)(nil).CreateBook), arg0, arg1)
+}
+
+// CreateFile mocks base method.
+func (m *MockStorage) CreateFile(arg0 context.Context, arg1 entity.File) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateFile", arg0, arg1)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateFile indicates an expected call of CreateFile.
+func (mr *MockStorageMockRecorder) CreateFile(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFile", reflect.TypeOf((*MockStorage)(nil).CreateFile), arg0, arg1)
+}
+
+// CreateRepo mocks base method.
+func (m *MockStorage) CreateRepo(arg0 context.Context, arg1 entity.Repo) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateRepo", arg0, arg1)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateRepo indicates an expected call of CreateRepo.
+func (mr *MockStorageMockRecorder) CreateRepo(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRepo", reflect.TypeOf((*MockStorage)(nil).CreateRepo), arg0, arg1)
+}
+
+// CreateUser mocks base method.
+func (m *MockStorage) CreateUser(arg0 context.Context, arg1 entity.User) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateUser", arg0, arg1)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateUser indicates an expected call of CreateUser.
+func (mr *MockStorageMockRecorder) CreateUser(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockStorage)(nil).CreateUser), arg0, arg1)
+}
+
+// DeleteBook mocks base method.
+func (m *MockStorage) DeleteBook(arg0 context.Context, arg1 int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteBook", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteBook indicates an expected call of DeleteBook.
+func (mr *MockStorageMockRecorder) DeleteBook(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteBook", reflect.TypeOf((*MockStorage)(nil).DeleteBook), arg0, arg1)
+}
+
+// DeleteFile mocks base method.
+func (m *MockStorage) DeleteFile(arg0 context.Context, arg1 string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteFile", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteFile indicates an expected call of DeleteFile.
+func (mr *MockStorageMockRecorder) DeleteFile(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFile", reflect.TypeOf((*MockStorage)(nil).DeleteFile), arg0, arg1)
+}
+
+// DeleteRepo mocks base method.
+func (m *MockStorage) DeleteRepo(arg0 context.Context, arg1 int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteRepo", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteRepo indicates an expected call of DeleteRepo.
+func (mr *MockStorageMockRecorder) DeleteRepo(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteRepo", reflect.TypeOf((*MockStorage)(nil).DeleteRepo), arg0, arg1)
+}
+
+// DeleteUser mocks base method.
+func (m *MockStorage) DeleteUser(arg0 context.Context, arg1 int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteUser", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteUser indicates an expected call of DeleteUser.
+func (mr *MockStorageMockRecorder) DeleteUser(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUser", reflect.TypeOf((*MockStorage)(nil).DeleteUser), arg0, arg1)
+}
+
+// GetBook mocks base method.
+func (m *MockStorage) GetBook(arg0 context.Context, arg1 int64) (entity.Book, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetBook", arg0, arg1)
+	ret0, _ := ret[0].(entity.Book)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetBook indicates an expected call of GetBook.
+func (mr *MockStorageMockRecorder) GetBook(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBook", reflect.TypeOf((*MockStorage)(nil).GetBook), arg0, arg1)
+}
+
+// GetFile mocks base method.
+func (m *MockStorage) GetFile(arg0 context.Context, arg1 string) (entity.File, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetFile", arg0, arg1)
+	ret0, _ := ret[0].(entity.File)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetFile indicates an expected call of GetFile.
+func (mr *MockStorageMockRecorder) GetFile(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFile", reflect.TypeOf((*MockStorage)(nil).GetFile), arg0, arg1)
+}
+
+// GetRepo mocks base method.
+func (m *MockStorage) GetRepo(arg0 context.Context, arg1 int64) (entity.Repo, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetRepo", arg0, arg1)
+	ret0, _ := ret[0].(entity.Repo)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetRepo indicates an expected call of GetRepo.
+func (mr *MockStorageMockRecorder) GetRepo(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRepo", reflect.TypeOf((*MockStorage)(nil).GetRepo), arg0, arg1)
+}
+
+// GetUser mocks base method.
+func (m *MockStorage) GetUser(arg0 context.Context, arg1 int64) (entity.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUser", arg0, arg1)
+	ret0, _ := ret[0].(entity.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUser indicates an expected call of GetUser.
+func (mr *MockStorageMockRecorder) GetUser(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUser", reflect.TypeOf((*MockStorage)(nil).GetUser), arg0, arg1)
+}
+
+// UpdateBook mocks base method.
+func (m *MockStorage) UpdateBook(arg0 context.Context, arg1 entity.Book) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateBook", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateBook indicates an expected call of UpdateBook.
+func (mr *MockStorageMockRecorder) UpdateBook(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateBook", reflect.TypeOf((*MockStorage)(nil).UpdateBook), arg0, arg1)
+}
+
+// UpdateFile mocks base method.
+func (m *MockStorage) UpdateFile(arg0 context.Context, arg1 entity.File) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateFile", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateFile indicates an expected call of UpdateFile.
+func (mr *MockStorageMockRecorder) UpdateFile(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateFile", reflect.TypeOf((*MockStorage)(nil).UpdateFile), arg0, arg1)
+}
+
+// UpdateRepo mocks base method.
+func (m *MockStorage) UpdateRepo(arg0 context.Context, arg1 entity.Repo) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateRepo", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateRepo indicates an expected call of UpdateRepo.
+func (mr *MockStorageMockRecorder) UpdateRepo(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRepo", reflect.TypeOf((*MockStorage)(nil).UpdateRepo), arg0, arg1)
+}
+
+// UpdateUser mocks base method.
+func (m *MockStorage) UpdateUser(arg0 context.Context, arg1 entity.User) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUser", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateUser indicates an expected call of UpdateUser.
+func (mr *MockStorageMockRecorder) UpdateUser(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUser", reflect.TypeOf((*MockStorage)(nil).UpdateUser), arg0, arg1)
+}

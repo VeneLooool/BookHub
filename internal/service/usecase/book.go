@@ -3,7 +3,6 @@ package usecase
 import (
 	"bookhub/internal/entity"
 	"context"
-	"errors"
 	"fmt"
 )
 
@@ -40,15 +39,16 @@ func (bs *BookService) CreateBook(ctx context.Context, book entity.Book) (ID int
 			return 0, fmt.Errorf("CreateFile: %w", err)
 		}
 	}
-	if len(book.File.File) == 0 {
-		return 0, errors.New("book file is empty")
-	}
 	book.File.Path, err = bs.fileManager.CreateFile(ctx, book.File)
 	if err != nil {
 		return 0, fmt.Errorf("CreateFile: %w", err)
 	}
 
-	return bs.storage.CreateBook(ctx, book)
+	ID, err = bs.storage.CreateBook(ctx, book)
+	if err != nil {
+		return 0, fmt.Errorf("CreateBook: %w", err)
+	}
+	return ID, nil
 }
 func (bs *BookService) GetBook(ctx context.Context, ID int64) (book entity.Book, err error) {
 	book, err = bs.storage.GetBook(ctx, ID)
@@ -60,9 +60,6 @@ func (bs *BookService) GetBook(ctx context.Context, ID int64) (book entity.Book,
 		if err != nil {
 			return entity.Book{}, fmt.Errorf("GetFile: %w", err)
 		}
-	}
-	if book.File.Path == "" {
-		return entity.Book{}, errors.New("book path is empty")
 	}
 	book.File, err = bs.fileManager.GetFile(ctx, book.File.Path)
 	if err != nil {
@@ -96,7 +93,7 @@ func (bs *BookService) UpdateBook(ctx context.Context, newBook entity.Book) (boo
 	if err != nil {
 		return entity.Book{}, fmt.Errorf("UpdateBook: %w", err)
 	}
-	return book, err
+	return book, nil
 }
 
 func (bs *BookService) DeleteBook(ctx context.Context, ID int64) (err error) {
@@ -114,5 +111,9 @@ func (bs *BookService) DeleteBook(ctx context.Context, ID int64) (err error) {
 	if err != nil {
 		return fmt.Errorf("DeleteFile: %w", err)
 	}
-	return bs.storage.DeleteBook(ctx, ID)
+	err = bs.storage.DeleteBook(ctx, ID)
+	if err != nil {
+		return fmt.Errorf("DeleteFile: %w", err)
+	}
+	return nil
 }
