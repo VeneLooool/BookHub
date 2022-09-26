@@ -3,6 +3,7 @@ package usecase
 import (
 	"bookhub/internal/entity"
 	"context"
+	"fmt"
 )
 
 type UserStorage interface {
@@ -22,11 +23,19 @@ func NewUserService(userStorage UserStorage) *UserService {
 	}
 }
 
-func (us *UserService) CreateUser(ctx context.Context, user entity.User) (int64, error) {
-	return us.storage.CreateUser(ctx, user)
+func (us *UserService) CreateUser(ctx context.Context, user entity.User) (ID int64, err error) {
+	ID, err = us.storage.CreateUser(ctx, user)
+	if err != nil {
+		return 0, fmt.Errorf("CreateUser: %w", err)
+	}
+	return ID, nil
 }
-func (us *UserService) GetUser(ctx context.Context, userID int64) (entity.User, error) {
-	return us.storage.GetUser(ctx, userID)
+func (us *UserService) GetUser(ctx context.Context, userID int64) (user entity.User, err error) {
+	user, err = us.storage.GetUser(ctx, userID)
+	if err != nil {
+		return entity.User{}, fmt.Errorf("GetUser: %w", err)
+	}
+	return user, nil
 }
 
 func (us *UserService) updateUser(oldUser, newUser entity.User) entity.User {
@@ -41,20 +50,23 @@ func (us *UserService) updateUser(oldUser, newUser entity.User) entity.User {
 	}
 	return oldUser
 }
-func (us *UserService) UpdateUser(ctx context.Context, user entity.User) (entity.User, error) {
+func (us *UserService) UpdateUser(ctx context.Context, user entity.User) (updatedUser entity.User, err error) {
 	oldUser, err := us.storage.GetUser(ctx, user.ID)
 	if err != nil {
-		return entity.User{}, err
+		return entity.User{}, fmt.Errorf("GetUser: %w", err)
 	}
-	
+
 	user = us.updateUser(oldUser, user)
 	err = us.storage.UpdateUser(ctx, user)
 	if err != nil {
-		return entity.User{}, err
+		return entity.User{}, fmt.Errorf("UpdateUser: %w", err)
 	}
 	return user, nil
 }
 
-func (us *UserService) DeleteUser(ctx context.Context, userID int64) error {
-	return us.storage.DeleteUser(ctx, userID)
+func (us *UserService) DeleteUser(ctx context.Context, userID int64) (err error) {
+	if err = us.storage.DeleteUser(ctx, userID); err != nil {
+		return fmt.Errorf("DeleteUser: %w", err)
+	}
+	return nil
 }

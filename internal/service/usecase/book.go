@@ -33,42 +33,40 @@ func NewBookService(bookStorage BookStorage, fileManager FileManager) *BookServi
 	}
 }
 
-func (bs *BookService) CreateBook(ctx context.Context, book entity.Book) (int64, error) {
-	var err error
-
+func (bs *BookService) CreateBook(ctx context.Context, book entity.Book) (ID int64, err error) {
 	if len(book.Image.File) != 0 {
 		book.Image.Path, err = bs.fileManager.CreateFile(ctx, book.Image)
 		if err != nil {
-			return 0, fmt.Errorf("CreateBook: unable to create image: %w", err)
+			return 0, fmt.Errorf("CreateFile: %w", err)
 		}
 	}
 	if len(book.File.File) == 0 {
-		return 0, errors.New("CreateBook: book file not provided")
+		return 0, errors.New("book file is empty")
 	}
 	book.File.Path, err = bs.fileManager.CreateFile(ctx, book.File)
 	if err != nil {
-		return 0, fmt.Errorf("CreateBook: unable to create book file: %w", err)
+		return 0, fmt.Errorf("CreateFile: %w", err)
 	}
 
 	return bs.storage.CreateBook(ctx, book)
 }
-func (bs *BookService) GetBook(ctx context.Context, ID int64) (entity.Book, error) {
-	book, err := bs.storage.GetBook(ctx, ID)
+func (bs *BookService) GetBook(ctx context.Context, ID int64) (book entity.Book, err error) {
+	book, err = bs.storage.GetBook(ctx, ID)
 	if err != nil {
-		return entity.Book{}, fmt.Errorf("GetBook: unable to get book: %w", err)
+		return entity.Book{}, fmt.Errorf("GetBook: %w", err)
 	}
 	if book.Image.Path != "" {
 		book.Image, err = bs.fileManager.GetFile(ctx, book.Image.Path)
 		if err != nil {
-			return entity.Book{}, fmt.Errorf("GetBook: unable to get image: %w", err)
+			return entity.Book{}, fmt.Errorf("GetFile: %w", err)
 		}
 	}
 	if book.File.Path == "" {
-		return entity.Book{}, errors.New("GetBook: empty book path")
+		return entity.Book{}, errors.New("book path is empty")
 	}
 	book.File, err = bs.fileManager.GetFile(ctx, book.File.Path)
 	if err != nil {
-		return entity.Book{}, fmt.Errorf("GetBook: unable to get book file: %w", err)
+		return entity.Book{}, fmt.Errorf("GetFile: %w", err)
 	}
 	return book, nil
 }
@@ -87,34 +85,34 @@ func (bs *BookService) updateBook(oldBook, newBook entity.Book) entity.Book {
 	}
 	return oldBook
 }
-func (bs *BookService) UpdateBook(ctx context.Context, newBook entity.Book) (entity.Book, error) {
-	book, err := bs.storage.GetBook(ctx, newBook.ID)
+func (bs *BookService) UpdateBook(ctx context.Context, newBook entity.Book) (book entity.Book, err error) {
+	book, err = bs.storage.GetBook(ctx, newBook.ID)
 	if err != nil {
-		return entity.Book{}, err
+		return entity.Book{}, fmt.Errorf("GetBook: %w", err)
 	}
 
 	book = bs.updateBook(book, newBook)
 	err = bs.storage.UpdateBook(ctx, book)
 	if err != nil {
-		return entity.Book{}, err
+		return entity.Book{}, fmt.Errorf("UpdateBook: %w", err)
 	}
 	return book, err
 }
 
-func (bs *BookService) DeleteBook(ctx context.Context, ID int64) error {
+func (bs *BookService) DeleteBook(ctx context.Context, ID int64) (err error) {
 	book, err := bs.storage.GetBook(ctx, ID)
 	if err != nil {
-		return fmt.Errorf("DeleteBook: unable to get book: %w", err)
+		return fmt.Errorf("GetBook: %w", err)
 	}
 	if book.Image.Path != "" {
 		err = bs.fileManager.DeleteFile(ctx, book.Image.Path)
 		if err != nil {
-			return fmt.Errorf("DeleteBook: unable to delete image: %w", err)
+			return fmt.Errorf("DeleteFile: %w", err)
 		}
 	}
 	err = bs.fileManager.DeleteFile(ctx, book.File.Path)
 	if err != nil {
-		return fmt.Errorf("DeleteBook: unable to delete book file: %w", err)
+		return fmt.Errorf("DeleteFile: %w", err)
 	}
 	return bs.storage.DeleteBook(ctx, ID)
 }
