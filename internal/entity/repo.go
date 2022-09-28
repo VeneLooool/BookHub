@@ -5,5 +5,4 @@ type Repo struct {
 	Visibility string
 	Name       string
 	Desc       string
-	Books      []int64
 }

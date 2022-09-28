@@ -16,7 +16,6 @@ var (
 	errEmptyFilePath = errors.New("book path is empty")
 )
 
-// TODO дописать тесты
 func TestBookService_CreateBook(t *testing.T) {
 	t.Parallel()
 	ctrl := gomock.NewController(t)
@@ -31,7 +30,7 @@ func TestBookService_CreateBook(t *testing.T) {
 			name: "normal test",
 			mock: func() {
 				mockFileManager.EXPECT().CreateFile(context.Background(), entity.File{}).Return("", nil)
-				mockBookStorage.EXPECT().CreateBook(context.Background(), entity.Book{}).Return(int64(10), nil)
+				mockBookStorage.EXPECT().CreateBook(context.Background(), int64(0), entity.Book{}).Return(int64(10), nil)
 			},
 			res: int64(10),
 			err: nil,
@@ -48,7 +47,7 @@ func TestBookService_CreateBook(t *testing.T) {
 			name: "storage error",
 			mock: func() {
 				mockFileManager.EXPECT().CreateFile(context.Background(), entity.File{}).Return("", nil)
-				mockBookStorage.EXPECT().CreateBook(context.Background(), entity.Book{}).Return(int64(0), errServStorageErr)
+				mockBookStorage.EXPECT().CreateBook(context.Background(), int64(0), entity.Book{}).Return(int64(0), errServStorageErr)
 			},
 			res: int64(0),
 			err: errServStorageErr,
@@ -61,7 +60,7 @@ func TestBookService_CreateBook(t *testing.T) {
 			t.Parallel()
 			tc.mock()
 
-			res, err := bookService.CreateBook(context.Background(), entity.Book{})
+			res, err := bookService.CreateBook(context.Background(), int64(0), entity.Book{})
 			require.EqualValues(t, res, tc.res)
 			require.ErrorIs(t, errors.Unwrap(err), tc.err)
 		})
@@ -82,19 +81,9 @@ func TestBookService_GetBook(t *testing.T) {
 			name: "normal test",
 			mock: func() {
 				mockBookStorage.EXPECT().GetBook(context.Background(), int64(0)).Return(entity.Book{}, nil)
-				mockFileManager.EXPECT().GetFile(context.Background(), "").Return(entity.File{}, nil)
 			},
 			res: entity.Book{},
 			err: nil,
-		},
-		{
-			name: "empty book",
-			mock: func() {
-				mockBookStorage.EXPECT().GetBook(context.Background(), int64(0)).Return(entity.Book{}, nil)
-				mockFileManager.EXPECT().GetFile(context.Background(), "").Return(entity.File{}, errEmptyFilePath)
-			},
-			res: entity.Book{},
-			err: errEmptyFilePath,
 		},
 		{
 			name: "storage error",

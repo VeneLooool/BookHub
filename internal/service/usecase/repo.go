@@ -7,8 +7,9 @@ import (
 )
 
 type RepoStorage interface {
-	CreateRepo(context.Context, entity.Repo) (int64, error)
+	CreateRepo(ctx context.Context, userID int64, repo entity.Repo) (int64, error)
 	GetRepo(context.Context, int64) (entity.Repo, error)
+	GetBooksForRepo(ctx context.Context, repoID int64) ([]entity.Book, error)
 	UpdateRepo(context.Context, entity.Repo) error
 	DeleteRepo(context.Context, int64) error
 }
@@ -23,8 +24,8 @@ func NewRepoService(repoStorage RepoStorage) *RepoService {
 	}
 }
 
-func (rs *RepoService) CreateRepo(ctx context.Context, repo entity.Repo) (ID int64, err error) {
-	ID, err = rs.storage.CreateRepo(ctx, repo)
+func (rs *RepoService) CreateRepo(ctx context.Context, userID int64, repo entity.Repo) (ID int64, err error) {
+	ID, err = rs.storage.CreateRepo(ctx, userID, repo)
 	if err != nil {
 		return 0, fmt.Errorf("CreateRepo: %w", err)
 	}
@@ -36,6 +37,13 @@ func (rs *RepoService) GetRepo(ctx context.Context, ID int64) (repo entity.Repo,
 		return entity.Repo{}, fmt.Errorf("GetRepo: %w", err)
 	}
 	return repo, nil
+}
+func (rs *RepoService) GetBooksForRepo(ctx context.Context, repoID int64) (books []entity.Book, err error) {
+	books, err = rs.storage.GetBooksForRepo(ctx, repoID)
+	if err != nil {
+		return nil, fmt.Errorf("GetBookForRepo: %w", err)
+	}
+	return books, err
 }
 func (rs *RepoService) updateRepo(oldRepo, newRepo entity.Repo) entity.Repo {
 	if newRepo.Visibility != "" {

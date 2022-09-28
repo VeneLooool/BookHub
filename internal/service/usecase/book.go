@@ -3,11 +3,14 @@ package usecase
 import (
 	"bookhub/internal/entity"
 	"context"
+	"errors"
 	"fmt"
 )
 
 type BookStorage interface {
-	CreateBook(context.Context, entity.Book) (int64, error)
+	CreateBook(ctx context.Context, repoId int64, book entity.Book) (int64, error)
+	GetBookFile(ctx context.Context, bookID int64) (entity.File, error)
+	GetBookImage(ctx context.Context, bookID int64) (entity.File, error)
 	GetBook(context.Context, int64) (entity.Book, error)
 	UpdateBook(context.Context, entity.Book) error
 	DeleteBook(context.Context, int64) error
@@ -32,38 +35,56 @@ func NewBookService(bookStorage BookStorage, fileManager FileManager) *BookServi
 	}
 }
 
-func (bs *BookService) CreateBook(ctx context.Context, book entity.Book) (ID int64, err error) {
+func (bs *BookService) CreateBook(ctx context.Context, repoId int64, book entity.Book) (ID int64, err error) {
 	if len(book.Image.File) != 0 {
+		book.Image.Name = book.Title + "_" + book.Author
 		book.Image.Path, err = bs.fileManager.CreateFile(ctx, book.Image)
-		if err != nil {
+		if err != nil && !errors.Is(err, entity.ErrFileAlreadyExists) {
 			return 0, fmt.Errorf("CreateFile: %w", err)
 		}
 	}
+	book.File.Name = book.Title + "_" + book.Author
 	book.File.Path, err = bs.fileManager.CreateFile(ctx, book.File)
-	if err != nil {
+	if err != nil && !errors.Is(err, entity.ErrFileAlreadyExists) {
 		return 0, fmt.Errorf("CreateFile: %w", err)
 	}
 
-	ID, err = bs.storage.CreateBook(ctx, book)
+	ID, err = bs.storage.CreateBook(ctx, repoId, book)
 	if err != nil {
 		return 0, fmt.Errorf("CreateBook: %w", err)
 	}
 	return ID, nil
 }
+func (bs *BookService) GetBookFile(ctx context.Context, bookID int64) (file entity.File, err error) {
+	book, err := bs.storage.GetBook(ctx, bookID)
+	if err != nil {
+		return entity.File{}, fmt.Errorf("GetBook: %w", err)
+	}
+	file, err = bs.fileManager.GetFile(ctx, book.File.Path)
+	if err != nil {
+		return entity.File{}, fmt.Errorf("GetFile: %w", err)
+	}
+	return file, nil
+}
+func (bs *BookService) GetBookImage(ctx context.Context, bookID int64) (file entity.File, err error) {
+	book, err := bs.storage.GetBook(ctx, bookID)
+	if err != nil {
+		return entity.File{}, fmt.Errorf("GetBook: %w", err)
+	}
+	if book.Image.Path == "" {
+		return entity.File{}, entity.ErrImageNotFound
+	}
+	file, err = bs.fileManager.GetFile(ctx, book.Image.Path)
+	if err != nil {
+		return entity.File{}, fmt.Errorf("GetFile: %w", err)
+	}
+	return file, nil
+}
+
 func (bs *BookService) GetBook(ctx context.Context, ID int64) (book entity.Book, err error) {
 	book, err = bs.storage.GetBook(ctx, ID)
 	if err != nil {
 		return entity.Book{}, fmt.Errorf("GetBook: %w", err)
-	}
-	if book.Image.Path != "" {
-		book.Image, err = bs.fileManager.GetFile(ctx, book.Image.Path)
-		if err != nil {
-			return entity.Book{}, fmt.Errorf("GetFile: %w", err)
-		}
-	}
-	book.File, err = bs.fileManager.GetFile(ctx, book.File.Path)
-	if err != nil {
-		return entity.Book{}, fmt.Errorf("GetFile: %w", err)
 	}
 	return book, nil
 }

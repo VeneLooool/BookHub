@@ -5,5 +5,4 @@ type User struct {
 	UserName string
 	Password string
 	Desc     string
-	Repos    []int64
 }

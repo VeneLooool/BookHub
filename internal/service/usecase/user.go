@@ -9,6 +9,7 @@ import (
 type UserStorage interface {
 	CreateUser(context.Context, entity.User) (int64, error)
 	GetUser(context.Context, int64) (entity.User, error)
+	GetReposForUser(ctx context.Context, userID int64) ([]entity.Repo, error)
 	UpdateUser(context.Context, entity.User) error
 	DeleteUser(context.Context, int64) error
 }
@@ -36,6 +37,14 @@ func (us *UserService) GetUser(ctx context.Context, userID int64) (user entity.U
 		return entity.User{}, fmt.Errorf("GetUser: %w", err)
 	}
 	return user, nil
+}
+
+func (us *UserService) GetReposForUser(ctx context.Context, userID int64) (repos []entity.Repo, err error) {
+	repos, err = us.storage.GetReposForUser(ctx, userID)
+	if err != nil {
+		return nil, fmt.Errorf("GetReposForUser: %w", err)
+	}
+	return repos, nil
 }
 
 func (us *UserService) updateUser(oldUser, newUser entity.User) entity.User {
