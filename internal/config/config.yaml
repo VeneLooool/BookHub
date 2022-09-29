@@ -1,0 +1,24 @@
+
+server:
+  AppVersion: 1.0.0
+  Port: :8081
+  Mode: Development
+  ReadTimeout: 5
+  WriteTimeout: 5
+  Debug: false
+
+logger:
+  Development: true
+  DisableCaller: false
+  DisableStacktrace: false
+  Encoding: json
+  Level: info
+
+postgres:
+  PostgresqlHost: localhost
+  PostgresqlPort: 5432
+  PostgresqlUser: postgres
+  PostgresqlPassword: postgres
+  PostgresqlDbname: auth_db
+  PostgresqlSslmode: false
+  PgDriver: pgx
