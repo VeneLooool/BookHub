@@ -18,11 +18,9 @@ func NewUserStorage(db *sqlx.DB) storage.UserStorage {
 
 func (st *UserStorage) CreateUser(ctx context.Context, user entity.User) (ID int64, err error) {
 	var u entity.User
-
 	if err = st.db.QueryRowxContext(
 		ctx,
 		createUser,
-		&user.ID,
 		&user.Name,
 		&user.UserName,
 		&user.Password,
@@ -30,7 +28,7 @@ func (st *UserStorage) CreateUser(ctx context.Context, user entity.User) (ID int
 	).Scan(&u); err != nil {
 		return 0, fmt.Errorf("QueryRowxContext: %w", err)
 	}
-	return u.ID, err
+	return u.ID, nil
 }
 func (st *UserStorage) GetUser(ctx context.Context, ID int64) (user entity.User, err error) {
 	if err = st.db.GetContext(ctx, &user, getUser, &ID); err != nil {

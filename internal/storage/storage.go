@@ -32,9 +32,9 @@ type BookStorage interface {
 
 type FileManager interface {
 	CreateFile(context.Context, entity.File) (string, error)
-	GetFile(context.Context, string) (entity.File, error)
+	GetFile(ctx context.Context, path string) (entity.File, error)
 	UpdateFile(context.Context, entity.File) error
-	DeleteFile(context.Context, string) error
+	DeleteFile(ctx context.Context, path string) error
 }
 
 type Storage interface {
