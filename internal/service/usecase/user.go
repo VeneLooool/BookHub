@@ -2,23 +2,16 @@ package usecase
 
 import (
 	"bookhub/internal/entity"
+	"bookhub/internal/storage"
 	"context"
 	"fmt"
 )
 
-type UserStorage interface {
-	CreateUser(context.Context, entity.User) (int64, error)
-	GetUser(context.Context, int64) (entity.User, error)
-	GetReposForUser(ctx context.Context, userID int64) ([]entity.Repo, error)
-	UpdateUser(context.Context, entity.User) error
-	DeleteUser(context.Context, int64) error
-}
-
 type UserService struct {
-	storage UserStorage
+	storage storage.UserStorage
 }
 
-func NewUserService(userStorage UserStorage) *UserService {
+func NewUserService(userStorage storage.UserStorage) *UserService {
 	return &UserService{
 		storage: userStorage,
 	}

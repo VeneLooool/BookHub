@@ -2,33 +2,18 @@ package usecase
 
 import (
 	"bookhub/internal/entity"
+	"bookhub/internal/storage"
 	"context"
 	"errors"
 	"fmt"
 )
 
-type BookStorage interface {
-	CreateBook(ctx context.Context, repoId int64, book entity.Book) (int64, error)
-	GetBookFile(ctx context.Context, bookID int64) (entity.File, error)
-	GetBookImage(ctx context.Context, bookID int64) (entity.File, error)
-	GetBook(context.Context, int64) (entity.Book, error)
-	UpdateBook(context.Context, entity.Book) error
-	DeleteBook(context.Context, int64) error
-}
-
-type FileManager interface {
-	CreateFile(context.Context, entity.File) (string, error)
-	GetFile(context.Context, string) (entity.File, error)
-	UpdateFile(context.Context, entity.File) error
-	DeleteFile(context.Context, string) error
-}
-
 type BookService struct {
-	storage     BookStorage
-	fileManager FileManager
+	storage     storage.BookStorage
+	fileManager storage.FileManager
 }
 
-func NewBookService(bookStorage BookStorage, fileManager FileManager) *BookService {
+func NewBookService(bookStorage storage.BookStorage, fileManager storage.FileManager) *BookService {
 	return &BookService{
 		storage:     bookStorage,
 		fileManager: fileManager,

@@ -2,23 +2,16 @@ package usecase
 
 import (
 	"bookhub/internal/entity"
+	"bookhub/internal/storage"
 	"context"
 	"fmt"
 )
 
-type RepoStorage interface {
-	CreateRepo(ctx context.Context, userID int64, repo entity.Repo) (int64, error)
-	GetRepo(context.Context, int64) (entity.Repo, error)
-	GetBooksForRepo(ctx context.Context, repoID int64) ([]entity.Book, error)
-	UpdateRepo(context.Context, entity.Repo) error
-	DeleteRepo(context.Context, int64) error
-}
-
 type RepoService struct {
-	storage RepoStorage
+	storage storage.RepoStorage
 }
 
-func NewRepoService(repoStorage RepoStorage) *RepoService {
+func NewRepoService(repoStorage storage.RepoStorage) *RepoService {
 	return &RepoService{
 		storage: repoStorage,
 	}
