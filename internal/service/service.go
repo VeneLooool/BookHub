@@ -26,6 +26,7 @@ type RepoUseCase interface {
 	GetBooksForRepo(ctx context.Context, repoID int64) ([]entity.Book, error)
 	UpdateRepo(ctx context.Context, repo entity.Repo) (entity.Repo, error)
 	DeleteRepo(ctx context.Context, ID int64) error
+	DeleteBookFromRepo(ctx context.Context, RepoID, bookID int64) error
 }
 
 type Service interface {

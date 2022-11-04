@@ -70,3 +70,10 @@ func (rs *RepoService) DeleteRepo(ctx context.Context, ID int64) (err error) {
 	}
 	return nil
 }
+
+func (rs *RepoService) DeleteBookFromRepo(ctx context.Context, RepoID, bookID int64) (err error) {
+	if err = rs.storage.DeleteBookFromRepo(ctx, RepoID, bookID); err != nil {
+		return fmt.Errorf("DeleteRepo: %w", err)
+	}
+	return nil
+}
