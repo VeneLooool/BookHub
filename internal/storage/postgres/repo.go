@@ -69,3 +69,18 @@ func (st *RepoStorage) DeleteRepo(ctx context.Context, repoID int64) error {
 	}
 	return nil
 }
+
+func (st *RepoStorage) DeleteBookFromRepo(ctx context.Context, RepoID, bookID int64) error {
+	result, err := st.db.ExecContext(ctx, deleteBookFromRepo, bookID, RepoID)
+	if err != nil {
+		return fmt.Errorf("ExecContext: %w", err)
+	}
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("RowsAffected: %w", err)
+	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("RowsAffected: %w, %w", entity.ErrRepoNotFound, entity.ErrBookNotFound)
+	}
+	return nil
+}
