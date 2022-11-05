@@ -31,15 +31,6 @@ func (us *UserService) GetUser(ctx context.Context, userID int64) (user entity.U
 	}
 	return user, nil
 }
-
-func (us *UserService) GetReposForUser(ctx context.Context, userID int64) (repos []entity.Repo, err error) {
-	repos, err = us.storage.GetReposForUser(ctx, userID)
-	if err != nil {
-		return nil, fmt.Errorf("GetReposForUser: %w", err)
-	}
-	return repos, nil
-}
-
 func (us *UserService) updateUser(oldUser, newUser entity.User) entity.User {
 	if newUser.UserName != "" {
 		oldUser.UserName = newUser.UserName

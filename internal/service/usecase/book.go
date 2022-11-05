@@ -65,7 +65,6 @@ func (bs *BookService) GetBookImage(ctx context.Context, bookID int64) (file ent
 	}
 	return file, nil
 }
-
 func (bs *BookService) GetBook(ctx context.Context, ID int64) (book entity.Book, err error) {
 	book, err = bs.storage.GetBook(ctx, ID)
 	if err != nil {
@@ -73,6 +72,14 @@ func (bs *BookService) GetBook(ctx context.Context, ID int64) (book entity.Book,
 	}
 	return book, nil
 }
+func (bs *BookService) GetBooksForRepo(ctx context.Context, repoID int64) (books []entity.Book, err error) {
+	books, err = bs.storage.GetBooksForRepo(ctx, repoID)
+	if err != nil {
+		return nil, fmt.Errorf("GetBookForRepo: %w", err)
+	}
+	return books, err
+}
+
 func (bs *BookService) updateBook(oldBook, newBook entity.Book) entity.Book {
 	if newBook.Title != "" {
 		oldBook.Title = newBook.Title

@@ -64,21 +64,6 @@ func (mr *MockUserStorageMockRecorder) DeleteUser(arg0, arg1 interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUser", reflect.TypeOf((*MockUserStorage)(nil).DeleteUser), arg0, arg1)
 }
 
-// GetReposForUser mocks base method.
-func (m *MockUserStorage) GetReposForUser(ctx context.Context, userID int64) ([]entity.Repo, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetReposForUser", ctx, userID)
-	ret0, _ := ret[0].([]entity.Repo)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetReposForUser indicates an expected call of GetReposForUser.
-func (mr *MockUserStorageMockRecorder) GetReposForUser(ctx, userID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetReposForUser", reflect.TypeOf((*MockUserStorage)(nil).GetReposForUser), ctx, userID)
-}
-
 // GetUser mocks base method.
 func (m *MockUserStorage) GetUser(arg0 context.Context, arg1 int64) (entity.User, error) {
 	m.ctrl.T.Helper()
@@ -146,6 +131,20 @@ func (mr *MockRepoStorageMockRecorder) CreateRepo(ctx, userID, repo interface{})
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRepo", reflect.TypeOf((*MockRepoStorage)(nil).CreateRepo), ctx, userID, repo)
 }
 
+// DeleteBookFromRepo mocks base method.
+func (m *MockRepoStorage) DeleteBookFromRepo(ctx context.Context, RepoID, bookID int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteBookFromRepo", ctx, RepoID, bookID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteBookFromRepo indicates an expected call of DeleteBookFromRepo.
+func (mr *MockRepoStorageMockRecorder) DeleteBookFromRepo(ctx, RepoID, bookID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteBookFromRepo", reflect.TypeOf((*MockRepoStorage)(nil).DeleteBookFromRepo), ctx, RepoID, bookID)
+}
+
 // DeleteRepo mocks base method.
 func (m *MockRepoStorage) DeleteRepo(arg0 context.Context, arg1 int64) error {
 	m.ctrl.T.Helper()
@@ -158,21 +157,6 @@ func (m *MockRepoStorage) DeleteRepo(arg0 context.Context, arg1 int64) error {
 func (mr *MockRepoStorageMockRecorder) DeleteRepo(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteRepo", reflect.TypeOf((*MockRepoStorage)(nil).DeleteRepo), arg0, arg1)
-}
-
-// GetBooksForRepo mocks base method.
-func (m *MockRepoStorage) GetBooksForRepo(ctx context.Context, repoID int64) ([]entity.Book, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetBooksForRepo", ctx, repoID)
-	ret0, _ := ret[0].([]entity.Book)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetBooksForRepo indicates an expected call of GetBooksForRepo.
-func (mr *MockRepoStorageMockRecorder) GetBooksForRepo(ctx, repoID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBooksForRepo", reflect.TypeOf((*MockRepoStorage)(nil).GetBooksForRepo), ctx, repoID)
 }
 
 // GetRepo mocks base method.
@@ -188,6 +172,21 @@ func (m *MockRepoStorage) GetRepo(arg0 context.Context, arg1 int64) (entity.Repo
 func (mr *MockRepoStorageMockRecorder) GetRepo(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRepo", reflect.TypeOf((*MockRepoStorage)(nil).GetRepo), arg0, arg1)
+}
+
+// GetReposForUser mocks base method.
+func (m *MockRepoStorage) GetReposForUser(ctx context.Context, userID int64) ([]entity.Repo, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetReposForUser", ctx, userID)
+	ret0, _ := ret[0].([]entity.Repo)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetReposForUser indicates an expected call of GetReposForUser.
+func (mr *MockRepoStorageMockRecorder) GetReposForUser(ctx, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetReposForUser", reflect.TypeOf((*MockRepoStorage)(nil).GetReposForUser), ctx, userID)
 }
 
 // UpdateRepo mocks base method.
@@ -271,34 +270,19 @@ func (mr *MockBookStorageMockRecorder) GetBook(arg0, arg1 interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBook", reflect.TypeOf((*MockBookStorage)(nil).GetBook), arg0, arg1)
 }
 
-// GetBookFile mocks base method.
-func (m *MockBookStorage) GetBookFile(ctx context.Context, bookID int64) (entity.File, error) {
+// GetBooksForRepo mocks base method.
+func (m *MockBookStorage) GetBooksForRepo(ctx context.Context, repoID int64) ([]entity.Book, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetBookFile", ctx, bookID)
-	ret0, _ := ret[0].(entity.File)
+	ret := m.ctrl.Call(m, "GetBooksForRepo", ctx, repoID)
+	ret0, _ := ret[0].([]entity.Book)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetBookFile indicates an expected call of GetBookFile.
-func (mr *MockBookStorageMockRecorder) GetBookFile(ctx, bookID interface{}) *gomock.Call {
+// GetBooksForRepo indicates an expected call of GetBooksForRepo.
+func (mr *MockBookStorageMockRecorder) GetBooksForRepo(ctx, repoID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBookFile", reflect.TypeOf((*MockBookStorage)(nil).GetBookFile), ctx, bookID)
-}
-
-// GetBookImage mocks base method.
-func (m *MockBookStorage) GetBookImage(ctx context.Context, bookID int64) (entity.File, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetBookImage", ctx, bookID)
-	ret0, _ := ret[0].(entity.File)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetBookImage indicates an expected call of GetBookImage.
-func (mr *MockBookStorageMockRecorder) GetBookImage(ctx, bookID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBookImage", reflect.TypeOf((*MockBookStorage)(nil).GetBookImage), ctx, bookID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBooksForRepo", reflect.TypeOf((*MockBookStorage)(nil).GetBooksForRepo), ctx, repoID)
 }
 
 // UpdateBook mocks base method.
@@ -339,61 +323,61 @@ func (m *MockFileManager) EXPECT() *MockFileManagerMockRecorder {
 }
 
 // CreateFile mocks base method.
-func (m *MockFileManager) CreateFile(arg0 context.Context, arg1 entity.File) (string, error) {
+func (m *MockFileManager) CreateFile(ctx context.Context, file entity.File) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateFile", arg0, arg1)
+	ret := m.ctrl.Call(m, "CreateFile", ctx, file)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CreateFile indicates an expected call of CreateFile.
-func (mr *MockFileManagerMockRecorder) CreateFile(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockFileManagerMockRecorder) CreateFile(ctx, file interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFile", reflect.TypeOf((*MockFileManager)(nil).CreateFile), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFile", reflect.TypeOf((*MockFileManager)(nil).CreateFile), ctx, file)
 }
 
 // DeleteFile mocks base method.
-func (m *MockFileManager) DeleteFile(arg0 context.Context, arg1 string) error {
+func (m *MockFileManager) DeleteFile(ctx context.Context, path string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteFile", arg0, arg1)
+	ret := m.ctrl.Call(m, "DeleteFile", ctx, path)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DeleteFile indicates an expected call of DeleteFile.
-func (mr *MockFileManagerMockRecorder) DeleteFile(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockFileManagerMockRecorder) DeleteFile(ctx, path interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFile", reflect.TypeOf((*MockFileManager)(nil).DeleteFile), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFile", reflect.TypeOf((*MockFileManager)(nil).DeleteFile), ctx, path)
 }
 
 // GetFile mocks base method.
-func (m *MockFileManager) GetFile(arg0 context.Context, arg1 string) (entity.File, error) {
+func (m *MockFileManager) GetFile(ctx context.Context, path string) (entity.File, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetFile", arg0, arg1)
+	ret := m.ctrl.Call(m, "GetFile", ctx, path)
 	ret0, _ := ret[0].(entity.File)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetFile indicates an expected call of GetFile.
-func (mr *MockFileManagerMockRecorder) GetFile(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockFileManagerMockRecorder) GetFile(ctx, path interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFile", reflect.TypeOf((*MockFileManager)(nil).GetFile), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFile", reflect.TypeOf((*MockFileManager)(nil).GetFile), ctx, path)
 }
 
 // UpdateFile mocks base method.
-func (m *MockFileManager) UpdateFile(arg0 context.Context, arg1 entity.File) error {
+func (m *MockFileManager) UpdateFile(ctx context.Context, file entity.File) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateFile", arg0, arg1)
+	ret := m.ctrl.Call(m, "UpdateFile", ctx, file)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // UpdateFile indicates an expected call of UpdateFile.
-func (mr *MockFileManagerMockRecorder) UpdateFile(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockFileManagerMockRecorder) UpdateFile(ctx, file interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateFile", reflect.TypeOf((*MockFileManager)(nil).UpdateFile), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateFile", reflect.TypeOf((*MockFileManager)(nil).UpdateFile), ctx, file)
 }
 
 // MockStorage is a mock of Storage interface.
@@ -435,18 +419,18 @@ func (mr *MockStorageMockRecorder) CreateBook(ctx, repoId, book interface{}) *go
 }
 
 // CreateFile mocks base method.
-func (m *MockStorage) CreateFile(arg0 context.Context, arg1 entity.File) (string, error) {
+func (m *MockStorage) CreateFile(ctx context.Context, file entity.File) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateFile", arg0, arg1)
+	ret := m.ctrl.Call(m, "CreateFile", ctx, file)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CreateFile indicates an expected call of CreateFile.
-func (mr *MockStorageMockRecorder) CreateFile(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockStorageMockRecorder) CreateFile(ctx, file interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFile", reflect.TypeOf((*MockStorage)(nil).CreateFile), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFile", reflect.TypeOf((*MockStorage)(nil).CreateFile), ctx, file)
 }
 
 // CreateRepo mocks base method.
@@ -493,18 +477,32 @@ func (mr *MockStorageMockRecorder) DeleteBook(arg0, arg1 interface{}) *gomock.Ca
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteBook", reflect.TypeOf((*MockStorage)(nil).DeleteBook), arg0, arg1)
 }
 
-// DeleteFile mocks base method.
-func (m *MockStorage) DeleteFile(arg0 context.Context, arg1 string) error {
+// DeleteBookFromRepo mocks base method.
+func (m *MockStorage) DeleteBookFromRepo(ctx context.Context, RepoID, bookID int64) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteFile", arg0, arg1)
+	ret := m.ctrl.Call(m, "DeleteBookFromRepo", ctx, RepoID, bookID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteBookFromRepo indicates an expected call of DeleteBookFromRepo.
+func (mr *MockStorageMockRecorder) DeleteBookFromRepo(ctx, RepoID, bookID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteBookFromRepo", reflect.TypeOf((*MockStorage)(nil).DeleteBookFromRepo), ctx, RepoID, bookID)
+}
+
+// DeleteFile mocks base method.
+func (m *MockStorage) DeleteFile(ctx context.Context, path string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteFile", ctx, path)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DeleteFile indicates an expected call of DeleteFile.
-func (mr *MockStorageMockRecorder) DeleteFile(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockStorageMockRecorder) DeleteFile(ctx, path interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFile", reflect.TypeOf((*MockStorage)(nil).DeleteFile), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFile", reflect.TypeOf((*MockStorage)(nil).DeleteFile), ctx, path)
 }
 
 // DeleteRepo mocks base method.
@@ -550,36 +548,6 @@ func (mr *MockStorageMockRecorder) GetBook(arg0, arg1 interface{}) *gomock.Call 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBook", reflect.TypeOf((*MockStorage)(nil).GetBook), arg0, arg1)
 }
 
-// GetBookFile mocks base method.
-func (m *MockStorage) GetBookFile(ctx context.Context, bookID int64) (entity.File, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetBookFile", ctx, bookID)
-	ret0, _ := ret[0].(entity.File)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetBookFile indicates an expected call of GetBookFile.
-func (mr *MockStorageMockRecorder) GetBookFile(ctx, bookID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBookFile", reflect.TypeOf((*MockStorage)(nil).GetBookFile), ctx, bookID)
-}
-
-// GetBookImage mocks base method.
-func (m *MockStorage) GetBookImage(ctx context.Context, bookID int64) (entity.File, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetBookImage", ctx, bookID)
-	ret0, _ := ret[0].(entity.File)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetBookImage indicates an expected call of GetBookImage.
-func (mr *MockStorageMockRecorder) GetBookImage(ctx, bookID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBookImage", reflect.TypeOf((*MockStorage)(nil).GetBookImage), ctx, bookID)
-}
-
 // GetBooksForRepo mocks base method.
 func (m *MockStorage) GetBooksForRepo(ctx context.Context, repoID int64) ([]entity.Book, error) {
 	m.ctrl.T.Helper()
@@ -596,18 +564,18 @@ func (mr *MockStorageMockRecorder) GetBooksForRepo(ctx, repoID interface{}) *gom
 }
 
 // GetFile mocks base method.
-func (m *MockStorage) GetFile(arg0 context.Context, arg1 string) (entity.File, error) {
+func (m *MockStorage) GetFile(ctx context.Context, path string) (entity.File, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetFile", arg0, arg1)
+	ret := m.ctrl.Call(m, "GetFile", ctx, path)
 	ret0, _ := ret[0].(entity.File)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetFile indicates an expected call of GetFile.
-func (mr *MockStorageMockRecorder) GetFile(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockStorageMockRecorder) GetFile(ctx, path interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFile", reflect.TypeOf((*MockStorage)(nil).GetFile), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFile", reflect.TypeOf((*MockStorage)(nil).GetFile), ctx, path)
 }
 
 // GetRepo mocks base method.
@@ -670,17 +638,17 @@ func (mr *MockStorageMockRecorder) UpdateBook(arg0, arg1 interface{}) *gomock.Ca
 }
 
 // UpdateFile mocks base method.
-func (m *MockStorage) UpdateFile(arg0 context.Context, arg1 entity.File) error {
+func (m *MockStorage) UpdateFile(ctx context.Context, file entity.File) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateFile", arg0, arg1)
+	ret := m.ctrl.Call(m, "UpdateFile", ctx, file)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // UpdateFile indicates an expected call of UpdateFile.
-func (mr *MockStorageMockRecorder) UpdateFile(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockStorageMockRecorder) UpdateFile(ctx, file interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateFile", reflect.TypeOf((*MockStorage)(nil).UpdateFile), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateFile", reflect.TypeOf((*MockStorage)(nil).UpdateFile), ctx, file)
 }
 
 // UpdateRepo mocks base method.

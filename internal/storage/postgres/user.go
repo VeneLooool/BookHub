@@ -36,20 +36,7 @@ func (st *UserStorage) GetUser(ctx context.Context, ID int64) (user entity.User,
 	}
 	return user, nil
 }
-func (st *UserStorage) GetReposForUser(ctx context.Context, userID int64) (repos []entity.Repo, err error) {
-	rows, err := st.db.QueryxContext(ctx, getReposForUser, &userID)
-	if err != nil {
-		return nil, fmt.Errorf("QueryxContext: %w", err)
-	}
-	for rows.Next() {
-		var repo entity.Repo
-		if err = rows.StructScan(&repo); err != nil {
-			return nil, fmt.Errorf("StructScan: %w", err)
-		}
-		repos = append(repos, repo)
-	}
-	return repos, nil
-}
+
 func (st *UserStorage) UpdateUser(ctx context.Context, user entity.User) (err error) {
 	var u entity.User
 	if err = st.db.QueryRowxContext(ctx, updateUser,

@@ -29,8 +29,14 @@ func TestBookService_CreateBook(t *testing.T) {
 		{
 			name: "normal test",
 			mock: func() {
-				mockFileManager.EXPECT().CreateFile(context.Background(), entity.File{}).Return("", nil)
-				mockBookStorage.EXPECT().CreateBook(context.Background(), int64(0), entity.Book{}).Return(int64(10), nil)
+				var (
+					file entity.File
+					book entity.Book
+				)
+				file.Name = book.Title + "_" + book.Author
+				book.File = file
+				mockFileManager.EXPECT().CreateFile(context.Background(), file).Return("", nil)
+				mockBookStorage.EXPECT().CreateBook(context.Background(), int64(0), book).Return(int64(10), nil)
 			},
 			res: int64(10),
 			err: nil,
@@ -38,7 +44,12 @@ func TestBookService_CreateBook(t *testing.T) {
 		{
 			name: "empty book",
 			mock: func() {
-				mockFileManager.EXPECT().CreateFile(context.Background(), entity.File{}).Return("", errEmptyBookFile)
+				var (
+					file entity.File
+					book entity.Book
+				)
+				file.Name = book.Title + "_" + book.Author
+				mockFileManager.EXPECT().CreateFile(context.Background(), file).Return("", errEmptyBookFile)
 			},
 			res: int64(0),
 			err: errEmptyBookFile,
@@ -46,8 +57,14 @@ func TestBookService_CreateBook(t *testing.T) {
 		{
 			name: "storage error",
 			mock: func() {
-				mockFileManager.EXPECT().CreateFile(context.Background(), entity.File{}).Return("", nil)
-				mockBookStorage.EXPECT().CreateBook(context.Background(), int64(0), entity.Book{}).Return(int64(0), errServStorageErr)
+				var (
+					file entity.File
+					book entity.Book
+				)
+				file.Name = book.Title + "_" + book.Author
+				book.File = file
+				mockFileManager.EXPECT().CreateFile(context.Background(), file).Return("", nil)
+				mockBookStorage.EXPECT().CreateBook(context.Background(), int64(0), book).Return(int64(0), errServStorageErr)
 			},
 			res: int64(0),
 			err: errServStorageErr,

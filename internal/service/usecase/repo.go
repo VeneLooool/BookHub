@@ -31,12 +31,12 @@ func (rs *RepoService) GetRepo(ctx context.Context, ID int64) (repo entity.Repo,
 	}
 	return repo, nil
 }
-func (rs *RepoService) GetBooksForRepo(ctx context.Context, repoID int64) (books []entity.Book, err error) {
-	books, err = rs.storage.GetBooksForRepo(ctx, repoID)
+func (rs *RepoService) GetReposForUser(ctx context.Context, userID int64) (repos []entity.Repo, err error) {
+	repos, err = rs.storage.GetReposForUser(ctx, userID)
 	if err != nil {
-		return nil, fmt.Errorf("GetBookForRepo: %w", err)
+		return nil, fmt.Errorf("GetReposForUser: %w", err)
 	}
-	return books, err
+	return repos, nil
 }
 func (rs *RepoService) updateRepo(oldRepo, newRepo entity.Repo) entity.Repo {
 	if newRepo.Visibility != "" {

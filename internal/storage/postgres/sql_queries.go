@@ -49,7 +49,7 @@ const (
 	deleteRepo = `DELETE FROM repos WHERE repo_id = $1`
 
 	createBook = `INSERT INTO book (title, author, number_pages, desc, image_file_link, pdf_file_link) 
-   				  VALUES ($1, $2, $3, NULLIF($4, ''), NULLIF($5, ''), $6) RETURNING *`
+   				  VALUES ($1, $2, $3, NULLIF($4, ''), NULLIF($5, ''), $6) RETURNING book_id`
 	getBook    = `SELECT book_id, title, author, number_pages, desc, image_file_link, pdf_file_link FROM books WHERE book_id = $1`
 	updateBook = `UPDATE books SET
 						title = COALESCE(NULLIF($1, ''), title), 
@@ -64,4 +64,6 @@ const (
 	attachBookToRepo = `INSERT INTO repo_books (book_id, current_page, repo_id) 
 						VALUES ($1, $2, $3) RETURNING *`
 	deleteBookFromRepo = `DELETE FROM repo_books WHERE book_id = &1 AND repo_id = $2`
+
+	deleteBookFromAllRepos = `DELETE FROM repo_books WHERE book_id = &1`
 )

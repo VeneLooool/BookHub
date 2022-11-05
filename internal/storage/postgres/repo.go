@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"bookhub/internal/entity"
+	"bookhub/internal/storage"
 	"context"
 	"fmt"
 	"github.com/jmoiron/sqlx"
@@ -9,6 +10,10 @@ import (
 
 type RepoStorage struct {
 	db *sqlx.DB
+}
+
+func NewRepoStorage(db *sqlx.DB) storage.RepoStorage {
+	return &RepoStorage{db: db}
 }
 
 func (st *RepoStorage) CreateRepo(ctx context.Context, userID int64, repo entity.Repo) (ID int64, err error) {
@@ -29,20 +34,13 @@ func (st *RepoStorage) GetRepo(ctx context.Context, repoId int64) (repo entity.R
 	}
 	return repo, nil
 }
-func (st *RepoStorage) GetBooksForRepo(ctx context.Context, repoID int64) (books []entity.Book, err error) {
-	rows, err := st.db.QueryxContext(ctx, getBooksForRepo, &repoID)
-	if err != nil {
-		return nil, fmt.Errorf("QueryxContext: %w", err)
+func (st *RepoStorage) GetReposForUser(ctx context.Context, userID int64) (repos []entity.Repo, err error) {
+	if err = st.db.SelectContext(ctx, &repos, getReposForUser, userID); err != nil {
+		return nil, fmt.Errorf("SelectContext: %w", err)
 	}
-	for rows.Next() {
-		var book entity.Book
-		if err = rows.StructScan(&book); err != nil {
-			return nil, fmt.Errorf("StructcScan: %w", err)
-		}
-		books = append(books, book)
-	}
-	return books, nil
+	return repos, nil
 }
+
 func (st *RepoStorage) UpdateRepo(ctx context.Context, repo entity.Repo) error {
 	var r entity.Repo
 	if err := st.db.QueryRowxContext(ctx, updateRepo,
@@ -55,6 +53,8 @@ func (st *RepoStorage) UpdateRepo(ctx context.Context, repo entity.Repo) error {
 	}
 	return nil
 }
+
+// TODO зависимости в табличке repo_books
 func (st *RepoStorage) DeleteRepo(ctx context.Context, repoID int64) error {
 	result, err := st.db.ExecContext(ctx, deleteRepo, repoID)
 	if err != nil {
@@ -80,7 +80,7 @@ func (st *RepoStorage) DeleteBookFromRepo(ctx context.Context, RepoID, bookID in
 		return fmt.Errorf("RowsAffected: %w", err)
 	}
 	if rowsAffected == 0 {
-		return fmt.Errorf("RowsAffected: %w, %w", entity.ErrRepoNotFound, entity.ErrBookNotFound)
+		return fmt.Errorf("RowsAffected: %w", entity.ErrBookNotFound)
 	}
 	return nil
 }
