@@ -4,6 +4,7 @@ import (
 	"bookhub/internal/entity"
 	"bookhub/internal/storage"
 	"context"
+	"errors"
 	"fmt"
 	"github.com/jmoiron/sqlx"
 )
@@ -17,16 +18,16 @@ func NewRepoStorage(db *sqlx.DB) storage.RepoStorage {
 }
 
 func (st *RepoStorage) CreateRepo(ctx context.Context, userID int64, repo entity.Repo) (ID int64, err error) {
-	var r entity.Repo
-	if err = st.db.QueryRowxContext(ctx,
-		createRepo,
-		&repo.Name,
-		&repo.Visibility,
-		&repo.Desc,
-		&userID).Scan(&r); err != nil {
+	result, err := st.db.ExecContext(ctx, createRepo, repo.Name, repo.Visibility, repo.Desc, userID)
+	if err != nil {
 		return 0, fmt.Errorf("QueryRowxContext: %w", err)
 	}
-	return r.ID, nil
+
+	ID, err = result.LastInsertId()
+	if err != nil {
+		return 0, fmt.Errorf("LastInsertId: %w", err)
+	}
+	return ID, nil
 }
 func (st *RepoStorage) GetRepo(ctx context.Context, repoId int64) (repo entity.Repo, err error) {
 	if err = st.db.GetContext(ctx, &repo, getRepo, &repoId); err != nil {
@@ -42,20 +43,43 @@ func (st *RepoStorage) GetReposForUser(ctx context.Context, userID int64) (repos
 }
 
 func (st *RepoStorage) UpdateRepo(ctx context.Context, repo entity.Repo) error {
-	var r entity.Repo
-	if err := st.db.QueryRowxContext(ctx, updateRepo,
-		&repo.Name,
-		&repo.Visibility,
-		&repo.Desc,
-		&repo.ID,
-	).StructScan(&r); err != nil {
+	result, err := st.db.ExecContext(ctx, updateRepo, &repo.Name, &repo.Visibility, &repo.Desc, &repo.ID)
+	if err != nil {
 		return fmt.Errorf("QueryRowxContext: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("RowsAffected: %w", err)
+	}
+	if rowsAffected != 1 {
+		return errors.New("RowsAffected more or less than one")
 	}
 	return nil
 }
 
-// TODO зависимости в табличке repo_books
 func (st *RepoStorage) DeleteRepo(ctx context.Context, repoID int64) error {
+	tx, err := st.db.Begin()
+	if err != nil {
+		return fmt.Errorf("transaction begin: %w", err)
+	}
+	defer func() {
+		if p := recover(); p != nil {
+			err = fmt.Errorf("transcation failed, recover from panic %w", err)
+			tx.Rollback()
+		} else if err != nil {
+			err = fmt.Errorf("transaction failed, rollback: %w", err)
+			tx.Rollback()
+		} else {
+			if err = tx.Commit(); err != nil {
+				err = fmt.Errorf("transaction commit failed: %w", err)
+			}
+		}
+	}()
+	if _, err = st.db.ExecContext(ctx, removeAttachmentsOfBooksToRepo, repoID); err != nil {
+		return fmt.Errorf("ExecContext: %w", err)
+	}
+
 	result, err := st.db.ExecContext(ctx, deleteRepo, repoID)
 	if err != nil {
 		return fmt.Errorf("ExecContext: %w", err)
@@ -67,6 +91,7 @@ func (st *RepoStorage) DeleteRepo(ctx context.Context, repoID int64) error {
 	if rowsAffected == 0 {
 		return fmt.Errorf("RowsAffected: %w", entity.ErrRepoNotFound)
 	}
+
 	return nil
 }
 

@@ -86,6 +86,74 @@ func TestBookStorage_CreateBook(t *testing.T) {
 	}
 }
 
+func TestBookStorage_GetBooksForRepo(t *testing.T) {
+	type args struct {
+		ctx    context.Context
+		repoID int64
+	}
+	type mockBehavior func(args args)
+
+	mockDB, mockSQL, _ := sqlmock.New()
+	defer mockDB.Close()
+
+	bs := NewBookStorage(sqlx.NewDb(mockDB, "sqlmock"))
+
+	tests := []struct {
+		name    string
+		args    args
+		mock    mockBehavior
+		want    []entity.Book
+		wantErr bool
+	}{
+		{
+			name: "ok",
+			args: args{
+				ctx:    context.Background(),
+				repoID: 1,
+			},
+			want: []entity.Book{
+				{ID: 1, Title: "a", Author: "a", NumberPages: 100, CurrentPage: 0, Desc: "a", Image: entity.File{}, File: entity.File{}},
+				{ID: 2, Title: "b", Author: "b", NumberPages: 100, CurrentPage: 0, Desc: "b", Image: entity.File{}, File: entity.File{}},
+				{ID: 3, Title: "c", Author: "c", NumberPages: 100, CurrentPage: 0, Desc: "c", Image: entity.File{}, File: entity.File{}},
+			},
+			mock: func(args args) {
+				rows := sqlmock.NewRows([]string{"book_id", "title", "author", "number_pages", "desc", "current_page"}).
+					AddRow(1, "a", "a", 100, "a", 0).
+					AddRow(2, "b", "b", 100, "b", 0).
+					AddRow(3, "c", "c", 100, "c", 0)
+
+				mockSQL.ExpectQuery(`SELECT (.+)`).
+					WithArgs(args.repoID).WillReturnRows(rows)
+			},
+		},
+		{
+			name: "error in bd",
+			args: args{
+				ctx:    context.Background(),
+				repoID: 1,
+			},
+			wantErr: true,
+			mock: func(args args) {
+				mockSQL.ExpectQuery(`SELECT (.+)`).
+					WithArgs(args.repoID).WillReturnError(errors.New("error in bd"))
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			test.mock(test.args)
+
+			res, err := bs.GetBooksForRepo(test.args.ctx, test.args.repoID)
+			if test.wantErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, test.want, res)
+			}
+		})
+	}
+}
+
 func TestBookStorage_UpdateBook(t *testing.T) {
 	type args struct {
 		ctx  context.Context

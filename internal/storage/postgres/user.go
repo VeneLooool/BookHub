@@ -4,6 +4,7 @@ import (
 	"bookhub/internal/entity"
 	"bookhub/internal/storage"
 	"context"
+	"errors"
 	"fmt"
 	"github.com/jmoiron/sqlx"
 )
@@ -18,15 +19,14 @@ func NewUserStorage(db *sqlx.DB) storage.UserStorage {
 
 func (st *UserStorage) CreateUser(ctx context.Context, user entity.User) (ID int64, err error) {
 	var u entity.User
-	if err = st.db.QueryRowxContext(
-		ctx,
-		createUser,
-		&user.Name,
-		&user.UserName,
-		&user.Password,
-		&user.Desc,
-	).Scan(&u); err != nil {
+	result, err := st.db.ExecContext(ctx, createUser, &user.Name, &user.UserName, &user.Password, &user.Desc)
+	if err != nil {
 		return 0, fmt.Errorf("QueryRowxContext: %w", err)
+	}
+
+	ID, err = result.LastInsertId()
+	if err != nil {
+		return 0, fmt.Errorf("LastInsertId: %w", err)
 	}
 	return u.ID, nil
 }
@@ -38,15 +38,18 @@ func (st *UserStorage) GetUser(ctx context.Context, ID int64) (user entity.User,
 }
 
 func (st *UserStorage) UpdateUser(ctx context.Context, user entity.User) (err error) {
-	var u entity.User
-	if err = st.db.QueryRowxContext(ctx, updateUser,
-		&user.Name,
-		&user.UserName,
-		&user.Password,
-		&user.Desc,
-		&user.ID,
-	).StructScan(&u); err != nil {
+	result, err := st.db.ExecContext(ctx, updateUser, &user.Name, &user.UserName,
+		&user.Password, &user.Desc, &user.ID)
+	if err != nil {
 		return fmt.Errorf("QueryRowxContext: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("RowsAffected: %w", err)
+	}
+	if rowsAffected != 1 {
+		return errors.New("RowsAffected more or less than one")
 	}
 	return nil
 }

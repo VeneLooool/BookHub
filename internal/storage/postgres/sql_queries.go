@@ -33,20 +33,21 @@ const (
 						repo_desc,
 						user_id,
 				FROM repos WHERE repo_id = $1`
-	getBooksForRepo = `SELECT 
-						books.book_id, 
-						books.title, 
-						books.author, 
-						book.number_pages, 
-						books.desc, 
-						repo_books.current_page,
-					   FROM books INNER JOIN (SELECT * FROM repo_books WHERE repo_id = $1) on books.book_id = repo_books.id`
+	getBooksForRepo = `SELECT books.book_id, 
+						title, 
+						author, 
+						number_pages, 
+						desc, 
+						current_page,
+					   FROM books INNER JOIN (SELECT * FROM repo_books WHERE repo_id = $1) on books.book_id = repo_books.book_id`
 	updateRepo = `UPDATE repos SET 
 						name = COALESCE(NULLIF($1, ''), name), 
 						visible = COALESCE(NULLIF($2, ''), visible),
 						repo_desc = COALESCE(NULLIF($3, ''), repo_desc)
 					WHERE repo_id = $4`
-	deleteRepo = `DELETE FROM repos WHERE repo_id = $1`
+
+	removeAttachmentsOfBooksToRepo = `DELETE FROM repo_books WHERE repo_id = $1`
+	deleteRepo                     = `DELETE FROM repos WHERE repo_id = $1`
 
 	createBook = `INSERT INTO book (title, author, number_pages, desc, image_file_link, pdf_file_link) 
    				  VALUES ($1, $2, $3, NULLIF($4, ''), NULLIF($5, ''), $6) RETURNING book_id`
