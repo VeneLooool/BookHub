@@ -7,9 +7,10 @@ import (
 )
 
 type Config struct {
-	Server   ServerConfig
-	Postgres PostgresConfig
-	Logger   Logger
+	Server    ServerConfig
+	Postgres  PostgresConfig
+	Logger    Logger
+	Memcached Memcached
 }
 
 type ServerConfig struct {
@@ -37,6 +38,10 @@ type PostgresConfig struct {
 	PostgresqlDbname   string
 	PostgresqlSSLMode  bool
 	PgDriver           string
+}
+
+type Memcached struct {
+	URL string
 }
 
 func LoadConfig(filename string) (*viper.Viper, error) {
