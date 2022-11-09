@@ -41,7 +41,8 @@ type PostgresConfig struct {
 }
 
 type Memcached struct {
-	URL string
+	URL        string
+	Expiration int32
 }
 
 func LoadConfig(filename string) (*viper.Viper, error) {

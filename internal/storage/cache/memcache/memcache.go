@@ -1,66 +1,80 @@
 package memcache
 
 import (
+	"bookhub/internal/config"
+	"bookhub/internal/storage"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/bradfitz/gomemcache/memcache"
-	"strconv"
 )
 
-type Cache struct {
-	client *memcache.Client
+type Cache[Key comparable, T storage.CacheAble] struct {
+	client     *memcache.Client
+	expiration int32
 }
 
-func New(client *memcache.Client) *Cache {
-	return &Cache{
-		client: client,
-	}
+func New[Key comparable, T storage.CacheAble](c *config.Config) *Cache[Key, T] {
+	var cache Cache[Key, T]
+	cache.client = memcache.New(c.Memcached.URL)
+	return &cache
 }
 
-func (ch *Cache) Set(key any, item any) error {
-	keyStr, err := ch.keyToString(key)
-	if err != nil {
-		return err
-	}
-
+func (ch *Cache[Key, T]) Set(key string, item T) error {
 	data, err := json.Marshal(item)
 	if err != nil {
 		return fmt.Errorf("Marshal: %w", err)
 	}
 
 	chItem := memcache.Item{
-		Key:        keyStr,
+		Key:        key,
 		Value:      data,
-		Expiration: 60 * 10,
+		Expiration: ch.expiration,
 	}
 	if err = ch.client.Add(&chItem); err != nil {
-		return fmt.Errorf("Cache add: %w", err)
+		return fmt.Errorf("cache add: %w", err)
 	}
 	return nil
 }
-func (ch *Cache) Get(key any) (item any, err error) {
-	keyStr, err := ch.keyToString(key)
-	if err != nil {
-		return nil, err
-	}
-
-	chItem, err := ch.client.Get(keyStr)
+func (ch *Cache[Key, T]) Get(key string) (item T, err error) {
+	chItem, err := ch.client.Get(key)
 	if err != nil {
 		return nil, fmt.Errorf("cache get: %w", err)
 	}
-	if err = json.Unmarshal(chItem.Value, &item); err != nil {
+
+	err = json.Unmarshal(chItem.Value, &item)
+	if err != nil {
 		return nil, fmt.Errorf("unmarshal: %w", err)
 	}
 	return item, nil
 }
-func (ch *Cache) Exist(key any) (exist bool, err error) {
-	keyStr, err := ch.keyToString(key)
+func (ch *Cache[Key, T]) Update(key string, item T) error {
+	data, err := json.Marshal(item)
 	if err != nil {
-		return false, err
+		return fmt.Errorf("Marshal: %w", err)
 	}
 
-	_, err = ch.client.Get(keyStr)
+	chItem := memcache.Item{
+		Key:        key,
+		Expiration: ch.expiration,
+		Value:      data,
+	}
+	err = ch.client.Replace(&chItem)
+	if err == nil {
+		return nil
+	}
+	if !errors.Is(err, memcache.ErrCacheMiss) && !errors.Is(err, memcache.ErrNotStored) {
+		return fmt.Errorf("cache replace: %w", err)
+	}
+
+	err = ch.client.Add(&chItem)
+	if err != nil {
+		return fmt.Errorf("cache add: %w", err)
+	}
+	return nil
+}
+func (ch *Cache[Key, T]) Exist(key string) (exist bool, err error) {
+	_, err = ch.client.Get(key)
 	if errors.Is(err, memcache.ErrCacheMiss) {
 		return false, nil
 	}
@@ -69,27 +83,10 @@ func (ch *Cache) Exist(key any) (exist bool, err error) {
 	}
 	return true, nil
 }
-func (ch *Cache) Delete(key any) error {
-	keyStr, err := ch.keyToString(key)
-	if err != nil {
-		return err
-	}
-
-	err = ch.client.Delete(keyStr)
+func (ch *Cache[Key, T]) Delete(key string) error {
+	err := ch.client.Delete(key)
 	if err == nil || errors.Is(err, memcache.ErrCacheMiss) {
 		return nil
 	}
 	return fmt.Errorf("cache delete: %w", err)
-}
-
-func (ch *Cache) keyToString(key any) (keyStr string, err error) {
-	switch v := key.(type) {
-	case int:
-		keyStr = strconv.Itoa(v)
-	case string:
-		keyStr = v
-	default:
-		return "", errors.New("key type isn't comparable")
-	}
-	return keyStr, nil
 }

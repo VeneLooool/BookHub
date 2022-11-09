@@ -5,6 +5,14 @@ import (
 	"context"
 )
 
+type Storage interface {
+	UserStorage
+	RepoStorage
+	BookStorage
+	FileManager
+	Cache
+}
+
 type UserStorage interface {
 	CreateUser(context.Context, entity.User) (int64, error)
 	GetUser(context.Context, int64) (entity.User, error)
@@ -36,9 +44,14 @@ type FileManager interface {
 	DeleteFile(ctx context.Context, path string) error
 }
 
-type Storage interface {
-	UserStorage
-	RepoStorage
-	BookStorage
-	FileManager
+type CacheAble interface {
+	entity.Book | entity.Repo | entity.User
+}
+
+type Cache[Key comparable, T CacheAble] interface {
+	Set(Key, T) error
+	Get(Key) (T, error)
+	Exist(Key) (bool, error)
+	Update(Key, T) error
+	Delete(Key) error
 }
