@@ -14,9 +14,10 @@ type Cache[Key comparable, T storage.CacheAble] struct {
 	expiration int32
 }
 
-func New[Key comparable, T storage.CacheAble](c *config.Config) *Cache[Key, T] {
+func New[Key comparable, T storage.CacheAble](c *config.Memcached) *Cache[Key, T] {
 	var cache Cache[Key, T]
-	cache.client = memcache.New(c.Memcached.URL)
+	cache.client = memcache.New(c.URL)
+	cache.expiration = c.Expiration
 	return &cache
 }
 
