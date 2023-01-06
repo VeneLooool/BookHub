@@ -1,9 +1,9 @@
 package filemanager
 
 import (
-	"bookhub/internal/entity"
 	"context"
 	"errors"
+	"github.com/VeneLooool/BookHub/internal/entity"
 	"os"
 )
 

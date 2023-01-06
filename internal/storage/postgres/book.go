@@ -1,11 +1,11 @@
 package postgres
 
 import (
-	"bookhub/internal/entity"
-	"bookhub/internal/storage"
 	"context"
 	"errors"
 	"fmt"
+	"github.com/VeneLooool/BookHub/internal/entity"
+	"github.com/VeneLooool/BookHub/internal/storage"
 	"github.com/jmoiron/sqlx"
 )
 

@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"bookhub/internal/config"
-	intHttp "bookhub/internal/delivery/http"
-	"bookhub/internal/service"
+	"github.com/VeneLooool/BookHub/internal/config"
+	intHttp "github.com/VeneLooool/BookHub/internal/delivery/http"
+	"github.com/VeneLooool/BookHub/internal/service"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )

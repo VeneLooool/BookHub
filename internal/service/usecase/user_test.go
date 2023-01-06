@@ -1,10 +1,10 @@
 package usecase
 
 import (
-	"bookhub/internal/entity"
-	"bookhub/internal/service/usecase/mock"
 	"context"
 	"errors"
+	"github.com/VeneLooool/BookHub/internal/entity"
+	"github.com/VeneLooool/BookHub/internal/service/usecase/mock"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 	"testing"

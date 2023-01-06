@@ -1,7 +1,7 @@
 package memcache
 
 import (
-	"bookhub/internal/config"
+	"github.com/VeneLooool/BookHub/internal/config"
 	"github.com/bradfitz/gomemcache/memcache"
 )
 

@@ -1,8 +1,8 @@
 package postgres
 
 import (
-	"bookhub/internal/config"
 	"fmt"
+	"github.com/VeneLooool/BookHub/internal/config"
 	"github.com/jmoiron/sqlx"
 )
 

@@ -1,10 +1,10 @@
 package postgres
 
 import (
-	"bookhub/internal/entity"
 	"context"
 	"errors"
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/VeneLooool/BookHub/internal/entity"
 	"github.com/jmoiron/sqlx"
 	"github.com/stretchr/testify/assert"
 	"testing"

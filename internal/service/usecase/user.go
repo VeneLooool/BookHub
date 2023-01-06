@@ -1,10 +1,10 @@
 package usecase
 
 import (
-	"bookhub/internal/entity"
-	"bookhub/internal/storage"
 	"context"
 	"fmt"
+	"github.com/VeneLooool/BookHub/internal/entity"
+	"github.com/VeneLooool/BookHub/internal/storage"
 )
 
 type UserService struct {

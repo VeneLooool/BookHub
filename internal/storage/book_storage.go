@@ -1,9 +1,9 @@
 package storage
 
 import (
-	"bookhub/internal/entity"
 	"context"
 	"fmt"
+	"github.com/VeneLooool/BookHub/internal/entity"
 	"strconv"
 )
 

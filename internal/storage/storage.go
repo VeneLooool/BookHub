@@ -1,8 +1,8 @@
 package storage
 
 import (
-	"bookhub/internal/entity"
 	"context"
+	"github.com/VeneLooool/BookHub/internal/entity"
 )
 
 type Storage interface {

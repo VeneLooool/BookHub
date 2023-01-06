@@ -1,0 +1,201 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = "https://github.com/VeneLooool/BookHub";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+service BookHubService {
+    rpc CreateUser(CreateUserReq) returns (User) {
+      option(google.api.http) = {
+        post: "/user"
+        body: "*"
+      };
+    }
+    rpc GetUser(GetUserReq) returns (User) {
+      option(google.api.http) = {
+        get: "/users/{userId}"
+      };
+    }
+    rpc UpdateUser(UpdateUserReq) returns (User) {
+      option(google.api.http) = {
+        put: "/user"
+        body: "*"
+      };
+    }
+    rpc DeleteUser(DeleteUserReq) returns (google.protobuf.Empty) {
+      option(google.api.http) = {
+        delete: "/users/{userId}"
+      };
+    }
+
+
+    rpc CreateRepo(CreateRepoReq) returns (Repo) {
+      option(google.api.http) = {
+        post: "/users/{userId}/repo"
+        body: "*"
+      };
+    }
+    rpc GetReposForUser(GetReposForUserReq) returns (GetReposForUserResp) {
+        option(google.api.http) = {
+          get: "/users/{userId}/repos"
+        };
+    }
+    rpc UpdateRepo(UpdateRepoReq) returns (Repo) {
+      option(google.api.http) = {
+        put: "/users/{userId}/repo"
+        body: "*"
+      };
+    }
+    rpc GetRepo(GetRepoReq) returns (Repo) {
+      option(google.api.http) = {
+        get: "/repos/{repoId}"
+      };
+    }
+    rpc DeleteRepo(DeleteRepoReq) returns (google.protobuf.Empty) {
+      option(google.api.http) = {
+        delete: "/repos/{repoId}"
+      };
+    }
+    rpc DeleteBookFromRepo(DeleteBookFromRepoReq) returns (google.protobuf.Empty) {
+      option(google.api.http) = {
+        delete: "/repos/{repoId}/books/{bookId}"
+      };
+    }
+
+
+    rpc CreateBook(CreateBookReq) returns (Book) {
+      option(google.api.http) = {
+        post: "/repos/{repoId}/book"
+        body: "*"
+      };
+    }
+    rpc GetBooksForRepo(GetBooksForRepoReq) returns (GetBooksForRepoResp) {
+      option(google.api.http) = {
+        get: "/repos/{repoId}/books"
+      };
+    }
+    rpc UpdateBook(UpdateBookReq) returns (Book) {
+      option(google.api.http) = {
+        put: "/repos/{repoId}/book"
+        body: "*"
+      };
+    }
+    rpc GetBook(GetBookReq) returns (Book) {
+      option(google.api.http) = {
+        get: "/books/{bookId}"
+      };
+    }
+    rpc GetBookImage(GetBookImageReq) returns (File) {
+      option(google.api.http) = {
+        get: "/books/{bookId}/image"
+      };
+    }
+    rpc GetBookFile(GetBookFileReq) returns (File) {
+      option(google.api.http) = {
+        get: "/books/{bookId}/file"
+      };
+    }
+    rpc DeleteBook(DeleteBookReq) returns (google.protobuf.Empty) {
+      option(google.api.http) = {
+        delete: "/books/{bookId}"
+      };
+    }
+}
+
+message User {
+  int64 id = 1;
+  string name = 2;
+  string username = 3;
+  string password = 4;
+  string description = 5;
+}
+
+message Repo {
+  int64 id = 1;
+  string name = 2;
+  string visibility = 3;
+  string description = 4;
+  int64 userId = 5;
+}
+
+message Book {
+  int64 id = 1;
+  string title = 2;
+  string author = 3;
+  int64 number_pages = 4;
+  int64 current_page = 5;
+  string description = 6;
+}
+
+message File {
+  string file_type = 2;
+  bytes file = 1;
+}
+
+message CreateUserReq {
+  User user = 1;
+}
+message GetUserReq {
+  int64 userId = 1;
+}
+message UpdateUserReq {
+  User user = 1;
+}
+message DeleteUserReq {
+  int64 userId = 1;
+}
+
+message CreateRepoReq {
+  int64 userId = 1;
+  Repo repo = 2;
+}
+message GetReposForUserReq {
+  int64 userId = 1;
+}
+message GetReposForUserResp {
+  repeated Repo repos = 1;
+}
+message UpdateRepoReq {
+  int64 userId = 1;
+  Repo repo = 2;
+}
+message GetRepoReq {
+  int64 repoId = 1;
+}
+message DeleteRepoReq {
+  int64 repoId = 1;
+}
+message DeleteBookFromRepoReq {
+  int64 repoId = 1;
+  int64 bookId = 2;
+}
+
+message CreateBookReq {
+  int64 repoId = 1;
+  Book book = 2;
+}
+message GetBooksForRepoReq {
+  int64 repoId = 1;
+}
+message GetBooksForRepoResp {
+  repeated Book books = 1;
+}
+message UpdateBookReq {
+  int64 repoId = 1;
+  Book book = 2;
+}
+message GetBookReq {
+  int64 bookId = 1;
+}
+message GetBookImageReq {
+  int64 bookId = 1;
+}
+message GetBookFileReq {
+  int64 bookId = 1;
+}
+message DeleteBookReq {
+  int64 bookId = 1;
+}
+

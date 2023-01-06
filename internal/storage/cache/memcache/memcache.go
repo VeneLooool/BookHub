@@ -1,11 +1,11 @@
 package memcache
 
 import (
-	"bookhub/internal/config"
-	"bookhub/internal/storage"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/VeneLooool/BookHub/internal/config"
+	"github.com/VeneLooool/BookHub/internal/storage"
 	"github.com/bradfitz/gomemcache/memcache"
 )
 
