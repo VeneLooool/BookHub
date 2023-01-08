@@ -175,6 +175,8 @@ message DeleteBookFromRepoReq {
 message CreateBookReq {
   int64 repoId = 1;
   Book book = 2;
+  File file = 3;
+  File image = 4;
 }
 message GetBooksForRepoReq {
   int64 repoId = 1;
