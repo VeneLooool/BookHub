@@ -7,10 +7,11 @@ import (
 )
 
 type Config struct {
-	Server    ServerConfig
-	Postgres  PostgresConfig
-	Logger    Logger
-	Memcached Memcached
+	Server      ServerConfig
+	Postgres    PostgresConfig
+	Logger      Logger
+	Memcached   Memcached
+	TelegramBot TelegramBotConfig
 }
 
 type ServerConfig struct {
@@ -38,6 +39,11 @@ type PostgresConfig struct {
 	PostgresqlDbname   string
 	PostgresqlSSLMode  bool
 	PgDriver           string
+}
+
+type TelegramBotConfig struct {
+	Timeout int
+	Token   string
 }
 
 type Memcached struct {

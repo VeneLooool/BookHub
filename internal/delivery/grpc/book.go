@@ -70,5 +70,5 @@ func (bs *BookService) DeleteBook(ctx context.Context, in *desc.DeleteBookReq) (
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-	return nil, nil
+	return &emptypb.Empty{}, nil
 }

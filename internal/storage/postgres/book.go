@@ -37,15 +37,12 @@ func (st *BookStorage) CreateBook(ctx context.Context, repoId int64, book entity
 
 	}()
 
-	result, err := tx.ExecContext(ctx, createBook, book.Title, book.Author, book.NumberPages, book.Desc, book.Image.Path, book.File.Path)
+	err = tx.QueryRowContext(ctx, createBook, book.Title, book.Author, book.NumberPages, book.Desc, book.Image.Path, book.File.Path).Scan(&repoId)
 	if err != nil {
 		return 0, fmt.Errorf("ExecContext: %w", err)
 	}
-	if book.ID, err = result.LastInsertId(); err != nil {
-		return 0, fmt.Errorf("LastInsetrId: %w", err)
-	}
 
-	result, err = tx.ExecContext(ctx, attachBookToRepo, book.ID, book.CurrentPage, repoId)
+	result, err := tx.ExecContext(ctx, attachBookToRepo, book.ID, book.CurrentPage, repoId)
 	if err != nil {
 		return 0, fmt.Errorf("ExecContext: %w", err)
 	}

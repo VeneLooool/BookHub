@@ -52,12 +52,12 @@ func (rs *RepoService) DeleteRepo(ctx context.Context, in *desc.DeleteRepoReq) (
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-	return nil, nil
+	return &emptypb.Empty{}, nil
 }
 func (rs *RepoService) DeleteBookFromRepo(ctx context.Context, in *desc.DeleteBookFromRepoReq) (*emptypb.Empty, error) {
 	err := rs.uc.DeleteBookFromRepo(ctx, in.GetRepoId(), in.GetBookId())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-	return nil, nil
+	return &emptypb.Empty{}, nil
 }

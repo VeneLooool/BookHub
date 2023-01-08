@@ -40,5 +40,5 @@ func (us *UserService) DeleteUser(ctx context.Context, in *desc.DeleteUserReq) (
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-	return nil, nil
+	return &emptypb.Empty{}, nil
 }

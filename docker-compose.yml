@@ -1,0 +1,23 @@
+version: '2'
+services:
+  postgres:
+    image: postgres:13.3
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    networks:
+      - web_network
+
+  memcached:
+    image: memcached
+    restart: always
+    ports:
+      - 11211:11211
+    networks:
+      - web_network
+networks:
+  web_network:
+    driver: bridge

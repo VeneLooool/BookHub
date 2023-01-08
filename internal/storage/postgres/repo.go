@@ -18,15 +18,11 @@ func NewRepoStorage(db *sqlx.DB) storage.RepoStorage {
 }
 
 func (st *RepoStorage) CreateRepo(ctx context.Context, userID int64, repo entity.Repo) (ID int64, err error) {
-	result, err := st.db.ExecContext(ctx, createRepo, repo.Name, repo.Visibility, repo.Desc, userID)
+	err = st.db.QueryRowContext(ctx, createRepo, repo.Name, repo.Visibility, repo.Desc, userID).Scan(&ID)
 	if err != nil {
 		return 0, fmt.Errorf("QueryRowxContext: %w", err)
 	}
 
-	ID, err = result.LastInsertId()
-	if err != nil {
-		return 0, fmt.Errorf("LastInsertId: %w", err)
-	}
 	return ID, nil
 }
 func (st *RepoStorage) GetRepo(ctx context.Context, repoId int64) (repo entity.Repo, err error) {
@@ -43,7 +39,7 @@ func (st *RepoStorage) GetReposForUser(ctx context.Context, userID int64) (repos
 }
 
 func (st *RepoStorage) UpdateRepo(ctx context.Context, repo entity.Repo) error {
-	result, err := st.db.ExecContext(ctx, updateRepo, &repo.Name, &repo.Visibility, &repo.Desc, &repo.ID)
+	result, err := st.db.ExecContext(ctx, updateRepo, &repo.Name, &repo.Desc, &repo.ID)
 	if err != nil {
 		return fmt.Errorf("QueryRowxContext: %w", err)
 	}

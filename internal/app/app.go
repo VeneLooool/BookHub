@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/VeneLooool/BookHub/internal/config"
 	grpc2 "github.com/VeneLooool/BookHub/internal/delivery/grpc"
+	"github.com/VeneLooool/BookHub/internal/delivery/telegram"
 	"github.com/VeneLooool/BookHub/internal/entity"
 	desc "github.com/VeneLooool/BookHub/internal/pb"
 	"github.com/VeneLooool/BookHub/internal/service/usecase"
@@ -57,18 +58,29 @@ func Run() {
 
 	service := grpc2.NewService(userUseCase, repoUseCase, bookUseCase)
 
-	listen, err := net.Listen("tcp", "localhost")
+	listen, err := net.Listen("tcp", "localhost:8080")
 	if err != nil {
 		panic(err)
 	}
 
 	grpcServer := grpc.NewServer()
 	desc.RegisterBookHubServiceServer(grpcServer, service)
-
+	log.Println("Server started")
 	go runRest(conf)
 
 	log.Fatal(grpcServer.Serve(listen))
 
+}
+
+func runTgBot(config *config.Config) {
+	telegram, err := telegram.NewTelegramBot(config.TelegramBot)
+	if err != nil {
+		panic(err)
+	}
+
+	if err = telegram.StartTelegramBot(); err != nil {
+		panic(err)
+	}
 }
 
 func runRest(config *config.Config) {
@@ -87,7 +99,7 @@ func runRest(config *config.Config) {
 	server := http.Server{
 		Handler: mux,
 	}
-	listen, err := net.Listen("tcp", ":8081")
+	listen, err := net.Listen("tcp", "localhost:8081")
 	if err != nil {
 		log.Fatal(err)
 	}

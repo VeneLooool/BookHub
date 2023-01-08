@@ -2,8 +2,6 @@ server:
   AppVersion: 1.0.0
   Port: :8080
   Mode: Development
-  ReadTimeout: 5
-  WriteTimeout: 5
   Debug: false
   Address: ""
   Network: "tcp"
@@ -19,14 +17,18 @@ logger:
   Encoding: json
   Level: info
 
+TelegramBotConfig:
+  Timeout: 60
+  Token: ""
+
 postgres:
   PostgresqlHost: localhost
   PostgresqlPort: 5432
   PostgresqlUser: postgres
   PostgresqlPassword: postgres
-  PostgresqlDbname: auth_db
+  PostgresqlDbname: postgres
   PostgresqlSslmode: false
   PgDriver: pgx
 memcached:
-  URL: ""
+  URL: "memcached:11211"
   Expiration: 3600

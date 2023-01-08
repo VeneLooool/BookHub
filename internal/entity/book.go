@@ -6,7 +6,7 @@ type Book struct {
 	Author      string `json:"author" db:"author"`
 	NumberPages int64  `json:"number_pages" db:"number_pages"`
 	CurrentPage int64  `json:"current_page" db:"current_page"`
-	Desc        string `json:"desc" db:"desc"`
+	Desc        string `json:"description" db:"description"`
 	Image       File   `json:"image" db:"image"`
 	File        File   `json:"file" db:"file"`
 }
