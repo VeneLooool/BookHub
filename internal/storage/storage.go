@@ -10,7 +10,6 @@ type Storage interface {
 	RepoStorage
 	BookStorage
 	FileManager
-	Cache
 }
 
 type UserStorage interface {

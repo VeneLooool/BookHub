@@ -5,7 +5,6 @@ import (
 	"github.com/VeneLooool/BookHub/internal/entity"
 	desc "github.com/VeneLooool/BookHub/internal/pb"
 	"github.com/VeneLooool/BookHub/internal/service"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -15,7 +14,7 @@ type BookService struct {
 	uc service.BookUseCase
 }
 
-func (bs *BookService) CreateBook(ctx context.Context, in *desc.CreateBookReq, opts ...grpc.CallOption) (*desc.Book, error) {
+func (bs *BookService) CreateBook(ctx context.Context, in *desc.CreateBookReq) (*desc.Book, error) {
 	book := transformBookFromGrpcToEntity(in.GetBook())
 	book.File.File = in.GetFile().GetFile()
 	book.Image.File = in.GetImage().GetFile()
@@ -26,7 +25,7 @@ func (bs *BookService) CreateBook(ctx context.Context, in *desc.CreateBookReq, o
 	}
 	return transformBookFromEntityToGrpc(entity.Book{ID: bookId}), nil
 }
-func (bs *BookService) GetBooksForRepo(ctx context.Context, in *desc.GetBooksForRepoReq, opts ...grpc.CallOption) (*desc.GetBooksForRepoResp, error) {
+func (bs *BookService) GetBooksForRepo(ctx context.Context, in *desc.GetBooksForRepoReq) (*desc.GetBooksForRepoResp, error) {
 	books, err := bs.uc.GetBooksForRepo(ctx, in.GetRepoId())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -38,35 +37,35 @@ func (bs *BookService) GetBooksForRepo(ctx context.Context, in *desc.GetBooksFor
 	}
 	return &desc.GetBooksForRepoResp{Books: grpcBooks}, nil
 }
-func (bs *BookService) UpdateBook(ctx context.Context, in *desc.UpdateBookReq, opts ...grpc.CallOption) (*desc.Book, error) {
+func (bs *BookService) UpdateBook(ctx context.Context, in *desc.UpdateBookReq) (*desc.Book, error) {
 	book, err := bs.uc.UpdateBook(ctx, transformBookFromGrpcToEntity(in.GetBook()))
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	return transformBookFromEntityToGrpc(book), nil
 }
-func (bs *BookService) GetBook(ctx context.Context, in *desc.GetBookReq, opts ...grpc.CallOption) (*desc.Book, error) {
+func (bs *BookService) GetBook(ctx context.Context, in *desc.GetBookReq) (*desc.Book, error) {
 	book, err := bs.uc.GetBook(ctx, in.GetBookId())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	return transformBookFromEntityToGrpc(book), nil
 }
-func (bs *BookService) GetBookImage(ctx context.Context, in *desc.GetBookImageReq, opts ...grpc.CallOption) (*desc.File, error) {
+func (bs *BookService) GetBookImage(ctx context.Context, in *desc.GetBookImageReq) (*desc.File, error) {
 	bookImage, err := bs.uc.GetBookImage(ctx, in.GetBookId())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	return &desc.File{File: bookImage.File, FileType: string(bookImage.Type)}, nil
 }
-func (bs *BookService) GetBookFile(ctx context.Context, in *desc.GetBookFileReq, opts ...grpc.CallOption) (*desc.File, error) {
+func (bs *BookService) GetBookFile(ctx context.Context, in *desc.GetBookFileReq) (*desc.File, error) {
 	bookFile, err := bs.uc.GetBookFile(ctx, in.GetBookId())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	return &desc.File{File: bookFile.File, FileType: string(bookFile.Type)}, nil
 }
-func (bs *BookService) DeleteBook(ctx context.Context, in *desc.DeleteBookReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (bs *BookService) DeleteBook(ctx context.Context, in *desc.DeleteBookReq) (*emptypb.Empty, error) {
 	err := bs.uc.DeleteBook(ctx, in.GetBookId())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())

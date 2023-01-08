@@ -1,11 +1,16 @@
-
 server:
   AppVersion: 1.0.0
-  Port: :8081
+  Port: :8080
   Mode: Development
   ReadTimeout: 5
   WriteTimeout: 5
   Debug: false
+  Address: ""
+  Network: "tcp"
+
+httpServer:
+  network: "tcp"
+  address: "8081"
 
 logger:
   Development: true
@@ -22,3 +27,6 @@ postgres:
   PostgresqlDbname: auth_db
   PostgresqlSslmode: false
   PgDriver: pgx
+memcached:
+  URL: ""
+  Expiration: 3600

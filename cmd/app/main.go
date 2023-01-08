@@ -1,6 +1,6 @@
 package main
 
-import "bookhub/internal/app"
+import "github.com/VeneLooool/BookHub/internal/app"
 
 func main() {
 	app.Run()

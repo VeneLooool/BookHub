@@ -9,8 +9,11 @@ package pb
 import (
 	context "context"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
+	//"google.golang.org/grpc/codes"
+	//"google.golang.org/grpc/status"
+
+	//codes "google.golang.org/grpc/codes"
+	//status "google.golang.org/grpc/status"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -231,7 +234,7 @@ type BookHubServiceServer interface {
 type UnimplementedBookHubServiceServer struct {
 }
 
-func (UnimplementedBookHubServiceServer) CreateUser(context.Context, *CreateUserReq) (*User, error) {
+/*func (UnimplementedBookHubServiceServer) CreateUser(context.Context, *CreateUserReq) (*User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
 func (UnimplementedBookHubServiceServer) GetUser(context.Context, *GetUserReq) (*User, error) {
@@ -281,7 +284,7 @@ func (UnimplementedBookHubServiceServer) GetBookFile(context.Context, *GetBookFi
 }
 func (UnimplementedBookHubServiceServer) DeleteBook(context.Context, *DeleteBookReq) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteBook not implemented")
-}
+}*/
 func (UnimplementedBookHubServiceServer) mustEmbedUnimplementedBookHubServiceServer() {}
 
 // UnsafeBookHubServiceServer may be embedded to opt out of forward compatibility for this service.

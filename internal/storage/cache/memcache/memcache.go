@@ -21,7 +21,7 @@ func New[Key comparable, T storage.CacheAble](c *config.Memcached) *Cache[Key, T
 	return &cache
 }
 
-func (ch *Cache[Key, T]) Set(key string, item T) error {
+func (ch Cache[Key, T]) Set(key string, item T) error {
 	data, err := json.Marshal(item)
 	if err != nil {
 		return fmt.Errorf("Marshal: %w", err)
@@ -37,19 +37,19 @@ func (ch *Cache[Key, T]) Set(key string, item T) error {
 	}
 	return nil
 }
-func (ch *Cache[Key, T]) Get(key string) (item T, err error) {
+func (ch Cache[Key, T]) Get(key string) (item T, err error) {
 	chItem, err := ch.client.Get(key)
 	if err != nil {
-		return nil, fmt.Errorf("cache get: %w", err)
+		return item, fmt.Errorf("cache get: %w", err)
 	}
 
 	err = json.Unmarshal(chItem.Value, &item)
 	if err != nil {
-		return nil, fmt.Errorf("unmarshal: %w", err)
+		return item, fmt.Errorf("unmarshal: %w", err)
 	}
 	return item, nil
 }
-func (ch *Cache[Key, T]) Update(key string, item T) error {
+func (ch Cache[Key, T]) Update(key string, item T) error {
 	data, err := json.Marshal(item)
 	if err != nil {
 		return fmt.Errorf("Marshal: %w", err)
@@ -74,7 +74,7 @@ func (ch *Cache[Key, T]) Update(key string, item T) error {
 	}
 	return nil
 }
-func (ch *Cache[Key, T]) Exist(key string) (exist bool, err error) {
+func (ch Cache[Key, T]) Exist(key string) (exist bool, err error) {
 	_, err = ch.client.Get(key)
 	if errors.Is(err, memcache.ErrCacheMiss) {
 		return false, nil
@@ -84,7 +84,7 @@ func (ch *Cache[Key, T]) Exist(key string) (exist bool, err error) {
 	}
 	return true, nil
 }
-func (ch *Cache[Key, T]) Delete(key string) error {
+func (ch Cache[Key, T]) Delete(key string) error {
 	err := ch.client.Delete(key)
 	if err == nil || errors.Is(err, memcache.ErrCacheMiss) {
 		return nil
