@@ -7,6 +7,7 @@ import (
 	"github.com/VeneLooool/BookHub/internal/delivery/telegram"
 	"github.com/VeneLooool/BookHub/internal/entity"
 	desc "github.com/VeneLooool/BookHub/internal/pb"
+	"github.com/VeneLooool/BookHub/internal/service"
 	"github.com/VeneLooool/BookHub/internal/service/usecase"
 	"github.com/VeneLooool/BookHub/internal/storage"
 	"github.com/VeneLooool/BookHub/internal/storage/cache/memcache"
@@ -42,7 +43,7 @@ func Run() {
 	repoCache := memcache.New[string, entity.Repo](&conf.Memcached)
 	bookCache := memcache.New[string, entity.Book](&conf.Memcached)
 
-	fileManager := filemanager.NewFileManager("./fileManager")
+	fileManager := filemanager.NewFileManager("./fileManager/")
 
 	userStorage := postgres2.NewUserStorage(dbConnection)
 	repoStorage := postgres2.NewRepoStorage(dbConnection)
@@ -66,18 +67,19 @@ func Run() {
 	grpcServer := grpc.NewServer()
 	desc.RegisterBookHubServiceServer(grpcServer, service)
 	log.Println("Server started")
+
 	go runRest(conf)
+	go runTgBot(conf, userUseCase, repoUseCase, bookUseCase)
 
 	log.Fatal(grpcServer.Serve(listen))
 
 }
 
-func runTgBot(config *config.Config) {
-	telegram, err := telegram.NewTelegramBot(config.TelegramBot)
+func runTgBot(config *config.Config, uc service.UserUseCase, rc service.RepoUseCase, bc service.BookUseCase) {
+	telegram, err := telegram.NewTelegramBot(context.Background(), config.TelegramBot, uc, rc, bc)
 	if err != nil {
-		panic(err)
+		log.Fatalf("newTelegramBot: %w", err)
 	}
-
 	if err = telegram.StartTelegramBot(); err != nil {
 		panic(err)
 	}

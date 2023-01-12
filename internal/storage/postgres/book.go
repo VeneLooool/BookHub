@@ -37,7 +37,7 @@ func (st *BookStorage) CreateBook(ctx context.Context, repoId int64, book entity
 
 	}()
 
-	err = tx.QueryRowContext(ctx, createBook, book.Title, book.Author, book.NumberPages, book.Desc, book.Image.Path, book.File.Path).Scan(&repoId)
+	err = tx.QueryRowContext(ctx, createBook, book.Title, book.Author, book.NumberPages, book.Desc, book.Image.Path, book.File.Path).Scan(&book.ID)
 	if err != nil {
 		return 0, fmt.Errorf("ExecContext: %w", err)
 	}
@@ -58,7 +58,10 @@ func (st *BookStorage) CreateBook(ctx context.Context, repoId int64, book entity
 }
 func (st *BookStorage) GetBook(ctx context.Context, ID int64) (book entity.Book, err error) {
 	if err = st.db.GetContext(ctx, &book, getBook, &ID); err != nil {
-		return entity.Book{}, fmt.Errorf("GetContext: %w", err)
+		return entity.Book{}, fmt.Errorf("GetContext: getBook: %w", err)
+	}
+	if err = st.db.GetContext(ctx, &book.File, getBookFile, &ID); err != nil {
+		return entity.Book{}, fmt.Errorf("GetContext: getBookFile: %w", err)
 	}
 	return book, nil
 }

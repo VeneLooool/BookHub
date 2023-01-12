@@ -17,9 +17,9 @@ logger:
   Encoding: json
   Level: info
 
-TelegramBotConfig:
+TelegramBot:
   Timeout: 60
-  Token: ""
+  Token: "966852735:AAGp2qr-cecl0q8cJIq2imaW4oDhO8Im1Gc"
 
 postgres:
   PostgresqlHost: localhost

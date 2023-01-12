@@ -33,13 +33,12 @@ const (
 						repo_desc,
 						user_id
 				FROM repos WHERE repo_id = $1`
-	getBooksForRepo = `SELECT books.book_id, 
-						title, 
-						author, 
-						number_pages, 
-						description, 
-						current_page,
-					   FROM books INNER JOIN (SELECT * FROM repo_books WHERE repo_id = $1) on books.book_id = repo_books.book_id`
+	getBooksForRepo = `SELECT books.book_id,
+       books.title,
+       books.author,
+       books.number_pages,
+       books.description
+FROM books JOIN (SELECT * FROM repo_books WHERE repo_id = $1) as foo on books.book_id = foo.repo_id`
 	updateRepo = `UPDATE repos SET 
 						name = COALESCE(NULLIF($1, ''), name), 
 						repo_desc = COALESCE(NULLIF($2, ''), repo_desc)
@@ -50,8 +49,9 @@ const (
 
 	createBook = `INSERT INTO books (title, author, number_pages, description, image_file_link, pdf_file_link) 
    				  VALUES ($1, $2, $3, NULLIF($4, ''), NULLIF($5, ''), $6) RETURNING book_id`
-	getBook    = `SELECT book_id, title, author, number_pages, description, image_file_link, pdf_file_link FROM books WHERE book_id = $1`
-	updateBook = `UPDATE books SET
+	getBook     = `SELECT book_id, title, author, number_pages, description FROM books WHERE book_id = $1`
+	getBookFile = `SELECT pdf_file_link FROM books WHERE book_id = $1`
+	updateBook  = `UPDATE books SET
 						title = COALESCE(NULLIF($1, ''), title), 
 						author = COALESCE(NULLIF($2, ''), author),
 						number_pages = COALESCE(NULLIF($3, ''), number_pages)

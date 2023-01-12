@@ -41,6 +41,7 @@ func (fm *FileManager) CreateFile(ctx context.Context, file entity.File) (path s
 	return path, nil
 }
 func (fm *FileManager) GetFile(ctx context.Context, path string) (file entity.File, err error) {
+	file.Path = path
 	file.File, err = os.ReadFile(path)
 	if err != nil {
 		return entity.File{}, err
