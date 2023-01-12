@@ -19,7 +19,7 @@ logger:
 
 TelegramBot:
   Timeout: 60
-  Token: "966852735:AAGp2qr-cecl0q8cJIq2imaW4oDhO8Im1Gc"
+  Token: ""
 
 postgres:
   PostgresqlHost: localhost
